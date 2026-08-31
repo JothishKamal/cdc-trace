@@ -8,6 +8,7 @@ def _ok():
 
 
 def main():
+    """Sign a payload, enqueue a task, and retry a trivial callable."""
     key = generate_queue_key()
     task_id = generate_task_id()
     payload = b"task-body"

@@ -6,6 +6,7 @@ QUEUE_KEY_SIZE = 32
 
 
 def generate_task_id():
+    """Generate a random task id with secrets.token_bytes."""
     blob = secrets.token_bytes(TASK_ID_SIZE)
     if len(blob) != TASK_ID_SIZE:
         raise RuntimeError("task id size mismatch")
@@ -15,6 +16,7 @@ def generate_task_id():
 
 
 def generate_queue_key():
+    """Generate a random hmac key for sign_payload."""
     blob = secrets.token_bytes(QUEUE_KEY_SIZE)
     if len(blob) != QUEUE_KEY_SIZE:
         raise RuntimeError("queue key size mismatch")

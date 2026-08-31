@@ -3,6 +3,10 @@ _MAX_CACHE = 256
 
 
 def cache_geocode(query, result):
+    """Cache a geocode result under the stripped query string.
+
+    Oldest entries are dropped when the cache grows past _MAX_CACHE.
+    """
     if not isinstance(query, str) or not query:
         raise ValueError("query required")
     cleaned = query.strip()
@@ -26,6 +30,7 @@ def cache_geocode(query, result):
 
 
 def lookup_geocode(query):
+    """Return the cached geocode result for a query, or None."""
     if not isinstance(query, str) or not query:
         raise ValueError("query required")
     cleaned = query.strip()
@@ -42,6 +47,7 @@ def lookup_geocode(query):
 
 
 def clear_geocode_cache():
+    """Drop every cached geocode entry and return the empty size."""
     keys = list(_CACHE.keys())
     for key in keys:
         del _CACHE[key]

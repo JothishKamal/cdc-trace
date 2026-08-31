@@ -1,35 +1,15 @@
 \section{Sql storage}
 
-This section is introductory.
+The ledger keeps accounts and entries in sqlite so a process restart does not drop the journal. insert_entry stores the entry in the database with an integrity digest. query_entry queries the entries table by identifier. insert_entry uses sqlite3 for the insert and commit. query_entry implements sql lookup against SCHEMA columns. store_account stores the account in the database. store_account implements sql upsert so a second call with the same id replaces the row.
 
-insert_entry stores the entry in the database.
-
-query_entry queries the entries table.
-
-insert_entry uses sqlite3.
-
-query_entry implements sql lookup.
-
-store_account stores the account in the database.
+Balances exist in SCHEMA for later aggregation; the write path in this chapter is accounts and entries.
 
 \section{Integrity hashing}
 
-This section is introductory.
+A stored amount is only trusted if its digest still matches. hash_entry hashes the entry with sha256 over a json encoding of account and amount. hash_entry uses hashlib. verify_entry verifies the entry digest. hash_entry uses json serialisation so field order is stable. verify_entry returns a boolean.
 
-hash_entry hashes the entry with sha256.
-
-hash_entry uses hashlib.
-
-verify_entry verifies the entry digest.
-
-hash_entry uses json serialisation.
+The hex digest is 64 characters. A short string fails verification rather than hashing.
 
 \section{Schema}
 
-This section is introductory.
-
-query_entry queries the entries table in the database.
-
-store_account implements sql upsert.
-
-verify_entry returns a boolean.
+query_entry queries the entries table in the database after create_tables has installed SCHEMA. The mapping lists accounts, entries, and balances. Callers treat missing ids as None rather than as zero-amount rows.

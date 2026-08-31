@@ -3,6 +3,11 @@ import hmac
 
 
 def sign_payload(key, payload):
+    """Sign a payload with hmac sha256 and return the raw digest.
+
+    The function uses hmac.new so two equal (key, payload) pairs
+    produce the same signature.
+    """
     if not isinstance(key, (bytes, bytearray)):
         raise TypeError("key must be bytes")
     if not isinstance(payload, (bytes, bytearray)):
@@ -21,6 +26,10 @@ def sign_payload(key, payload):
 
 
 def verify_payload(key, payload, signature):
+    """Verify an hmac signature without leaking comparison time.
+
+    A length mismatch fails closed; compare_digest decides equality.
+    """
     if not isinstance(signature, (bytes, bytearray)):
         return False
     raw_sig = bytes(signature)

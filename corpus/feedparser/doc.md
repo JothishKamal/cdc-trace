@@ -1,43 +1,19 @@
-# Feed parser
-
 ## Feed parsing
 
-This section is introductory.
+The ingest path is a line-oriented pipe format rather than a full XML stack. parse_feed parses the feed with regex so each title, link, and summary can be lifted from a single compiled pattern. parse_feed uses regex compile on FEED_LINE before it walks the input. parse_feed implements regex matching and skips lines that do not match. parse_feed handles malformed input.
 
-parse_feed parses the feed with regex.
-
-parse_feed uses regex compile.
-
-parse_feed implements regex matching.
-
-parse_feed handles malformed input.
+Blank lines are not items. The resulting list is the only structure later stages see.
 
 ## Feed validation
 
-This section is introductory.
-
-validate_feed validates the feed structure.
-
-validate_feed returns a boolean.
+Structural checks sit between ingest and serialisation. validate_feed validates the feed structure by requiring a list of mappings with title and link. validate_feed returns a boolean so callers can reject markup-laden titles without raising. Tags inside a title fail the check because they are a common injection path.
 
 ## Json serialisation
 
-This section is introductory.
+Wire output is json so a page or client can consume the feed without knowing the pipe format. dump_feed uses json serialisation after stripping control characters. load_feed uses json to rebuild item mappings. dump_feed returns json text. load_feed parses json payloads and drops entries that are not objects.
 
-dump_feed uses json serialisation.
-
-load_feed uses json.
-
-dump_feed returns json text.
+Round-tripping dump then load is how tests confirm that summaries survive encoding.
 
 ## Http routes
 
-This section is introductory.
-
-The API exposes a health endpoint.
-
-The API exposes a feed route.
-
-health handles the health route.
-
-feed_endpoint uses the flask route.
+Two decorator-registered paths make the parser reachable without a full web stack. The health function returns a status mapping. The service exposes a health endpoint at /health. health handles the health path. feed_endpoint returns json text for a sample feed. The feed_endpoint function exposes a feed route at /feed.

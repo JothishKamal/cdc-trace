@@ -1,39 +1,15 @@
-# Image processing
-
 ## Numeric pipeline
 
-This section is introductory.
+The pipeline is a short chain of array-to-array functions with no image library behind them. convolve_image implements convolution with border clamping. resize_image returns a scaled image by repeating pixels. normalize_image returns normalized pixels in the unit interval. compute_histogram computes the histogram over that interval. convolve_image handles kernel application with nested loops. resize_image handles integer scale by replicating each row and column.
 
-convolve_image implements convolution.
-
-resize_image returns a scaled image.
-
-normalize_image returns normalized pixels.
-
-compute_histogram computes the histogram.
-
-convolve_image handles kernel application.
-
-resize_image handles integer scale.
+A zero-span image is left as-is during normalisation so a constant field does not become NaN.
 
 ## Image hashing
 
-This section is introductory.
+Digests let later stages compare images without keeping the arrays. hash_image hashes the image with sha256. hash_image uses hashlib over a json encoding of the nested lists. hash_histogram hashes the histogram with sha256 so two equal count vectors collide.
 
-hash_image hashes the image with sha256.
-
-hash_image uses hashlib.
-
-hash_histogram hashes the histogram with sha256.
+The encoding is json because it is stable for lists of numbers and needs no extra binary format.
 
 ## Metadata serialisation
 
-This section is introductory.
-
-dump_image_meta uses json serialisation.
-
-load_image_meta uses json.
-
-dump_image_meta returns json text.
-
-load_image_meta parses json payloads.
+Operators persist height, width, and digest rather than the pixels themselves. dump_image_meta uses json serialisation. load_image_meta uses json. dump_image_meta returns json text. load_image_meta parses json payloads into integers and a digest string.

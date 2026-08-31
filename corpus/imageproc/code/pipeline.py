@@ -1,4 +1,9 @@
 def convolve_image(pixels, kernel):
+    """Convolve a numeric image with a square kernel.
+
+    Out-of-range taps clamp to the border so the output has the same
+    shape as the input.
+    """
     if not pixels:
         return []
     height = len(pixels)
@@ -29,6 +34,7 @@ def convolve_image(pixels, kernel):
 
 
 def resize_image(pixels, scale):
+    """Return a scaled image by integer nearest-neighbour replication."""
     if scale < 1:
         raise ValueError("scale must be at least 1")
     out = []
@@ -43,6 +49,10 @@ def resize_image(pixels, scale):
 
 
 def normalize_image(pixels):
+    """Return normalized pixels in the unit interval.
+
+    A flat image is left unchanged because the span would be zero.
+    """
     flat = []
     for row in pixels:
         for cell in row:
@@ -61,6 +71,7 @@ def normalize_image(pixels):
 
 
 def compute_histogram(pixels, bins=8):
+    """Compute a histogram of unit-interval pixels."""
     if bins < 1:
         raise ValueError("bins must be positive")
     counts = [0] * bins

@@ -4,6 +4,7 @@ from serialize import dump_feed, load_feed
 
 
 def main():
+    """Parse, validate, serialise, and hit the health and feed routes."""
     raw = "Alpha|https://example.invalid/a|One\nBeta|https://example.invalid/b|Two"
     items = parse_feed(raw)
     ok = validate_feed(items)

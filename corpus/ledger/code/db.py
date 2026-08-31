@@ -1,42 +1,22 @@
-import sqlite3
-
-
-_CREATE_ENTRIES = (
-    "CREATE TABLE IF NOT EXISTS entries ("
-    "id INTEGER PRIMARY KEY, "
-    "account TEXT NOT NULL, "
-    "amount INTEGER NOT NULL, "
-    "digest TEXT NOT NULL"
-    ")"
-)
-_CREATE_ACCOUNTS = (
-    "CREATE TABLE IF NOT EXISTS accounts ("
-    "id TEXT PRIMARY KEY, "
-    "name TEXT NOT NULL, "
-    "balance INTEGER NOT NULL"
-    ")"
-)
+from schema import SCHEMA, connect_memory
 
 
 _CONN = None
 
 
-def _connect():
-    conn = sqlite3.connect(":memory:")
-    conn.execute(_CREATE_ACCOUNTS)
-    conn.execute(_CREATE_ENTRIES)
-    conn.commit()
-    return conn
-
-
 def _db():
     global _CONN
     if _CONN is None:
-        _CONN = _connect()
+        _CONN = connect_memory()
     return _CONN
 
 
 def insert_entry(account, amount, digest):
+    """Store a ledger entry in the database.
+
+    The insert writes account, amount, and an integrity digest into the
+    entries table.
+    """
     if not isinstance(account, str) or not account.strip():
         raise ValueError("account required")
     if not isinstance(digest, str) or len(digest) != 64:
@@ -51,6 +31,7 @@ def insert_entry(account, amount, digest):
 
 
 def query_entry(entry_id):
+    """Query the entries table and return one row mapping."""
     conn = _db()
     cursor = conn.execute(
         "SELECT id, account, amount, digest FROM entries WHERE id = ?",
@@ -59,15 +40,17 @@ def query_entry(entry_id):
     row = cursor.fetchone()
     if row is None:
         return None
+    columns = SCHEMA["entries"]
     return {
-        "id": row[0],
-        "account": row[1],
-        "amount": row[2],
-        "digest": row[3],
+        columns[0]: row[0],
+        columns[1]: row[1],
+        columns[2]: row[2],
+        columns[3]: row[3],
     }
 
 
 def store_account(account_id, name, balance):
+    """Store an account row in the database using sql upsert."""
     if not isinstance(account_id, str) or not account_id.strip():
         raise ValueError("account id required")
     if not isinstance(name, str) or not name.strip():

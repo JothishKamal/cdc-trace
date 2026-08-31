@@ -8,6 +8,7 @@ from persist import query_session, store_session
 
 
 def main():
+    """Run an encrypt, hash, store, and query round trip."""
     key = rotate_session_key()
     token = b"session-token-example"
     blob = aes_gcm_encrypt_token(key, token)

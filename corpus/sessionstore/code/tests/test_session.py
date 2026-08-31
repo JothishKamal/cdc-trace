@@ -25,11 +25,11 @@ def test_hash_session_token():
 
 
 def test_store_session():
-    store_session("s1", "u1", "abc", 1)
+    store_session("s1", "u1", "a" * 64, 1)
 
 
 def test_query_session():
-    store_session("s2", "u2", "def", 2)
+    store_session("s2", "u2", "b" * 64, 2)
     query_session("s2")
 
 

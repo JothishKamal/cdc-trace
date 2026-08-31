@@ -1,4 +1,8 @@
 def enqueue_task(queue, name, payload):
+    """Store a named task on the queue with a zero attempt counter.
+
+    The queue is a list of mappings; missing queues start empty.
+    """
     if queue is None:
         queue = []
     if not isinstance(queue, list):
@@ -24,6 +28,11 @@ def enqueue_task(queue, name, payload):
 
 
 def retry_task(task, attempts):
+    """Retry a callable until it returns or attempts are exhausted.
+
+    The loop handles transient failures by catching exceptions and
+    trying again up to the caller-supplied limit.
+    """
     if not callable(task):
         raise TypeError("task must be callable")
     if attempts < 1:

@@ -1,43 +1,19 @@
-# Session store
-
 ## Token encryption
 
-This section is introductory.
+Session tokens sit behind a small authenticated-encryption boundary before they ever reach storage. AES GCM encrypts the session token so confidentiality and integrity travel together. aes_gcm_encrypt_token uses cryptography to construct an AESGCM cipher and returns a nonce concatenated with the ciphertext. aes_gcm_decrypt_token returns the plaintext token when the supplied key and blob are valid. aes_gcm_encrypt_token implements aes encryption rather than a homemade stream xor.
 
-AES GCM encrypts the session token.
-
-aes_gcm_encrypt_token uses cryptography.
-
-aes_gcm_decrypt_token returns the plaintext token.
-
-aes_gcm_encrypt_token implements aes encryption.
+The nonce is generated per call so two encryptions of the same token do not collide. Callers keep the key outside the database and treat the blob as opaque.
 
 ## Token hashing
 
-This section is introductory.
-
-hash_session_token hashes the token with sha256.
-
-hash_session_token uses hashlib.
+Lookup must not keep recoverable tokens next to session metadata. hash_session_token hashes the token with sha256 so only a digest is durable. hash_session_token uses hashlib for that digest. The hex string is lowercase and fixed length, which makes equality checks straightforward.
 
 ## Key rotation
 
-This section is introductory.
+Long-lived encryption keys are a liability once a process has been running. rotate_session_key generates a random key when a rotation is due. rotate_session_key rotates the session key without deriving it from previous material. rotate_session_key uses random bytes from the secrets module.
 
-rotate_session_key generates a random key.
-
-rotate_session_key rotates the session key.
-
-rotate_session_key uses random bytes.
+Rotation is a distinct step from encryption: a caller obtains a new key, then later tokens go under that key.
 
 ## Session persistence
 
-This section is introductory.
-
-store_session stores the session in the database.
-
-query_session queries the sessions table.
-
-store_session uses sqlite3.
-
-query_session implements sql lookup.
+Durable state lives in sqlite rather than in process memory alone. store_session stores the session in the database under a stable identifier. query_session queries the sessions table and returns a mapping or None. store_session uses sqlite3 for the insert. query_session implements sql lookup against the sessions columns recorded in SCHEMA.

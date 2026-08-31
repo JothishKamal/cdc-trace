@@ -14,7 +14,7 @@
       "doc_md": "corpus/feedparser/doc.md",
       "doc_tex": "corpus/feedparser/doc.tex",
       "entry_points": ["main"],
-      "expected_claim_count": 13
+      "expected_claim_count": 15
     },
     {
       "name": "taskqueue",
@@ -22,7 +22,7 @@
       "doc_md": "corpus/taskqueue/doc.md",
       "doc_tex": "corpus/taskqueue/doc.tex",
       "entry_points": ["main"],
-      "expected_claim_count": 12
+      "expected_claim_count": 13
     },
     {
       "name": "geocoder",
@@ -30,7 +30,7 @@
       "doc_md": "corpus/geocoder/doc.md",
       "doc_tex": "corpus/geocoder/doc.tex",
       "entry_points": ["main"],
-      "expected_claim_count": 12
+      "expected_claim_count": 13
     },
     {
       "name": "ledger",

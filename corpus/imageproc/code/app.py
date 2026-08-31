@@ -4,6 +4,7 @@ from serialize import dump_image_meta, load_image_meta
 
 
 def main():
+    """Run convolution, resize, histogram, and json metadata dump."""
     pixels = [[0.0, 1.0], [1.0, 0.0]]
     kernel = [[0.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 0.0]]
     conv = convolve_image(pixels, kernel)

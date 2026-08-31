@@ -3,6 +3,7 @@ from integrity import hash_entry, verify_entry
 
 
 def main():
+    """Hash an entry, insert it, query it, and verify the digest."""
     store_account("a1", "cash", 0)
     digest = hash_entry("a1", 50)
     entry_id = insert_entry("a1", 50, digest)

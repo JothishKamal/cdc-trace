@@ -8,6 +8,11 @@ KEY_SIZE = 32
 
 
 def aes_gcm_encrypt_token(key, token):
+    """Encrypt a session token with AES GCM.
+
+    The function uses cryptography AESGCM so the returned blob carries a
+    nonce followed by authenticated ciphertext.
+    """
     if not isinstance(key, (bytes, bytearray)):
         raise TypeError("key must be bytes")
     if len(key) != KEY_SIZE:
@@ -21,6 +26,11 @@ def aes_gcm_encrypt_token(key, token):
 
 
 def aes_gcm_decrypt_token(key, blob):
+    """Return the plaintext token from an AES GCM blob.
+
+    The first twelve bytes are the nonce; the remainder is ciphertext
+    that AESGCM decrypts under the same key.
+    """
     if not isinstance(key, (bytes, bytearray)):
         raise TypeError("key must be bytes")
     if len(key) != KEY_SIZE:
@@ -37,6 +47,11 @@ def aes_gcm_decrypt_token(key, blob):
 
 
 def hash_session_token(token):
+    """Hash a session token with sha256 via hashlib.
+
+    The digest is a lowercase hex string so persist can store it without
+    keeping the recoverable token.
+    """
     if not isinstance(token, (bytes, bytearray)):
         raise TypeError("token must be bytes")
     digest = hashlib.sha256(bytes(token))
@@ -44,7 +59,12 @@ def hash_session_token(token):
 
 
 def rotate_session_key(old_key=None):
+    """Generate a random session key and rotate away from old_key.
+
+    Fresh material comes from secrets.token_bytes so the new key is not
+    derived from the previous one.
+    """
     new_key = secrets.token_bytes(KEY_SIZE)
-    if old_key is not None and old_key == new_key:
-        return secrets.token_bytes(KEY_SIZE)
+    if old_key is not None and bytes(old_key) == new_key:
+        new_key = secrets.token_bytes(KEY_SIZE)
     return new_key

@@ -2,6 +2,7 @@ import json
 
 
 def dump_image_meta(pixels, digest):
+    """Return json text describing height, width, and digest."""
     payload = {
         "height": len(pixels),
         "width": len(pixels[0]) if pixels else 0,
@@ -11,6 +12,7 @@ def dump_image_meta(pixels, digest):
 
 
 def load_image_meta(text):
+    """Parse json payloads into image metadata."""
     parsed = json.loads(text)
     if not isinstance(parsed, dict):
         raise ValueError("payload must be an object")

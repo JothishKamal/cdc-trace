@@ -8,6 +8,11 @@ TAG = re.compile(r"<[^>]+>")
 
 
 def parse_feed(text):
+    """Parse a pipe-delimited feed with regex compile and match.
+
+    Each non-empty line is matched against FEED_LINE; malformed lines
+    are skipped rather than raising.
+    """
     if not isinstance(text, str):
         raise TypeError("text must be a string")
     items = []
@@ -27,6 +32,10 @@ def parse_feed(text):
 
 
 def validate_feed(items):
+    """Validate feed structure and reject markup in titles.
+
+    A feed is a list of mappings with non-empty title and link fields.
+    """
     if not isinstance(items, list):
         return False
     for item in items:
@@ -37,5 +46,9 @@ def validate_feed(items):
         if not title or not link:
             return False
         if TAG.search(str(title)) is not None:
+            return False
+        if TAG.search(str(link)) is not None:
+            return False
+        if "://" not in str(link) and not str(link).startswith("/"):
             return False
     return True
