@@ -7,6 +7,20 @@ NONCE_SIZE = 12
 KEY_SIZE = 32
 
 
+def seal_blob(key, token):
+    """Seal a token blob with AES GCM via cryptography."""
+    if not isinstance(key, (bytes, bytearray)):
+        raise TypeError("key must be bytes")
+    if len(key) != KEY_SIZE:
+        raise ValueError("key must be 32 bytes")
+    if not isinstance(token, (bytes, bytearray)):
+        raise TypeError("token must be bytes")
+    nonce = secrets.token_bytes(NONCE_SIZE)
+    aesgcm = AESGCM(bytes(key))
+    ciphertext = aesgcm.encrypt(nonce, bytes(token), None)
+    return nonce + ciphertext
+
+
 def aes_gcm_encrypt_token(key, token):
     """Encrypt a session token with AES GCM.
 

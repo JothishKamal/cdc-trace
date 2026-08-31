@@ -3,6 +3,7 @@ from crypto import (
     aes_gcm_encrypt_token,
     hash_session_token,
     rotate_session_key,
+    seal_blob,
 )
 from persist import query_session, store_session
 
@@ -11,6 +12,7 @@ def main():
     """Run an encrypt, hash, store, and query round trip."""
     key = rotate_session_key()
     token = b"session-token-example"
+    blob = seal_blob(key, token)
     blob = aes_gcm_encrypt_token(key, token)
     plain = aes_gcm_decrypt_token(key, blob)
     digest = hash_session_token(plain)

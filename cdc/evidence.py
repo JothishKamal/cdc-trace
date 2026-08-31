@@ -44,13 +44,18 @@ def _for_element(
         _name(claim, el),
         _doc(claim, el),
         _import(claim, el),
-        _call(claim, el, elements),
         _schema(claim, el),
-        _test(claim, el, elements),
         _body(claim, el),
     ):
         if piece is not None and piece.strength >= min_strength:
             ev.append(piece)
+    if ev and not el.is_stub:
+        for piece in (
+            _call(claim, el, elements),
+            _test(claim, el, elements),
+        ):
+            if piece is not None and piece.strength >= min_strength:
+                ev.append(piece)
     return ev
 
 

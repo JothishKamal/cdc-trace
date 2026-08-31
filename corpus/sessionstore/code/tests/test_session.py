@@ -3,8 +3,15 @@ from crypto import (
     aes_gcm_encrypt_token,
     hash_session_token,
     rotate_session_key,
+    seal_blob,
 )
 from persist import query_session, store_session
+
+
+def test_seal():
+    key = rotate_session_key()
+    blob = seal_blob(key, b"tok")
+    assert isinstance(blob, bytes)
 
 
 def test_aes_gcm_encrypt_token():

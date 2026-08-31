@@ -1,6 +1,6 @@
 ## Token encryption
 
-Session tokens sit behind a small authenticated-encryption boundary before they ever reach storage. AES GCM encrypts the session token so confidentiality and integrity travel together. aes_gcm_encrypt_token uses cryptography to construct an AESGCM cipher and returns a nonce concatenated with the ciphertext. aes_gcm_decrypt_token returns the plaintext token when the supplied key and blob are valid. aes_gcm_encrypt_token implements aes encryption rather than a homemade stream xor.
+Session tokens sit behind a small authenticated-encryption boundary before they ever reach storage. seal_blob returns ciphertext. AES GCM encrypts the session token so confidentiality and integrity travel together. aes_gcm_encrypt_token uses cryptography to construct an AESGCM cipher and returns a nonce concatenated with the ciphertext. aes_gcm_decrypt_token returns the plaintext token when the supplied key and blob are valid. aes_gcm_encrypt_token implements aes encryption rather than a homemade stream xor.
 
 The nonce is generated per call so two encryptions of the same token do not collide. Callers keep the key outside the database and treat the blob as opaque.
 

@@ -1,0 +1,389 @@
+"""E0–E6 experiment harness. Deterministic; no network."""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import random
+import shutil
+import sys
+import tempfile
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+from cdc.claims import extract_claims
+from cdc.codebase import extract_codebase
+from cdc.corroborate import corroboration
+from cdc.embed import TfidfEmbedder
+from cdc.evidence import gather
+from cdc.model import sub_tokens
+from cdc.mutate import OPERATORS, apply_mutations, rename_identifiers
+from cdc.policies import POLICIES
+
+SEED = 20260902
+K_MIN = 2
+THRESHOLDS = (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)
+K_SWEEP = (1, 2, 3, 4)
+SCORE_POLICIES = ("lexical", "embedding", "hybrid")
+COUNT_POLICIES = ("evidence_count", "channel_count")
+FIXED_POLICIES = ("cdc", "cdc_counterfactual")
+FRACTIONS = (0.0, 0.25, 0.5, 0.75, 1.0)
+RATE = 0.3
+
+
+def r6(x):
+    return round(float(x), 6)
+
+
+def load_manifest():
+    path = os.path.join(ROOT, "corpus", "manifest.json")
+    with open(path, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def load_project(entry):
+    code_dir = os.path.join(ROOT, entry["code_dir"])
+    doc_path = os.path.join(ROOT, entry["doc_md"])
+    elements = extract_codebase(code_dir)
+    with open(doc_path, encoding="utf-8") as fh:
+        claims = extract_claims(fh.read(), "md")
+    return code_dir, claims, elements
+
+
+def best_match(claim, elements):
+    best = None
+    best_n = -1
+    for el in sorted(elements, key=lambda e: e.uid):
+        n = len(claim.terms & set(sub_tokens(el.name)))
+        if n > best_n:
+            best_n = n
+            best = el
+    return best
+
+
+def gap_metrics(pairs):
+    tp = fp = fn = tn = 0
+    n_mut = 0
+    n_fi = 0
+    n = 0
+    for y_true_gap, pred_impl in pairs:
+        n += 1
+        y_pred_gap = not pred_impl
+        if y_true_gap and y_pred_gap:
+            tp += 1
+        elif (not y_true_gap) and y_pred_gap:
+            fp += 1
+        elif y_true_gap and (not y_pred_gap):
+            fn += 1
+        else:
+            tn += 1
+        if y_true_gap:
+            n_mut += 1
+            if pred_impl:
+                n_fi += 1
+    prec = tp / (tp + fp) if (tp + fp) else 0.0
+    rec = tp / (tp + fn) if (tp + fn) else 0.0
+    f1 = (2 * prec * rec / (prec + rec)) if (prec + rec) else 0.0
+    fir = n_fi / n_mut if n_mut else 0.0
+    return {
+        "precision": r6(prec),
+        "recall": r6(rec),
+        "f1": r6(f1),
+        "false_implemented_rate": r6(fir),
+        "tp": tp,
+        "fp": fp,
+        "fn": fn,
+        "tn": tn,
+        "n": n,
+        "n_mutated": n_mut,
+        "n_false_implemented": n_fi,
+    }
+
+
+def kwargs_for(name, thresholds, embedder):
+    if name in SCORE_POLICIES:
+        return dict(embedder=embedder, threshold=float(thresholds[name]), k_min=K_MIN)
+    if name in COUNT_POLICIES:
+        return dict(embedder=embedder, threshold=0.5, k_min=int(thresholds[name]))
+    return dict(embedder=embedder, threshold=0.5, k_min=K_MIN)
+
+
+def apply_policy(name, item, thresholds, embedder):
+    fn = POLICIES[name]
+    return fn(
+        item["claim"], item["elements"], item["evidence"],
+        **kwargs_for(name, thresholds, embedder),
+    )
+
+
+def metrics_for(name, items, thresholds, embedder, operator=None):
+    pairs = []
+    for it in items:
+        if operator is not None:
+            if it["operator"] == operator:
+                y_true_gap = True
+            elif it["operator"] is None:
+                y_true_gap = False
+            else:
+                continue
+        else:
+            y_true_gap = not it["truly_implemented"]
+        pred = apply_policy(name, it, thresholds, embedder)
+        pairs.append((y_true_gap, pred))
+    return gap_metrics(pairs)
+
+
+def build_embedder(pristine):
+    texts = []
+    for _name, (_code_dir, claims, elements) in pristine:
+        for claim in claims:
+            texts.append(claim.text)
+        for el in elements:
+            texts.append(el.name)
+            if el.doc:
+                texts.append(el.doc)
+    return TfidfEmbedder(texts)
+
+
+def mutate_items(code_dir, claims, elements, rng, rate, project, round_i):
+    ordered = sorted(elements, key=lambda e: e.uid)
+    items = []
+    with tempfile.TemporaryDirectory() as tmp:
+        dst = os.path.join(tmp, "code")
+        records = apply_mutations(code_dir, dst, claims, ordered, rng, rate=rate)
+        mut_els = extract_codebase(dst)
+        targeted = {m.target_uid: m.operator for m in records}
+        for claim in claims:
+            best = best_match(claim, elements)
+            op = targeted.get(best.uid) if best is not None else None
+            ev = gather(claim, mut_els)
+            items.append({
+                "project": project,
+                "round": round_i,
+                "cid": claim.cid,
+                "claim": claim,
+                "elements": mut_els,
+                "evidence": ev,
+                "truly_implemented": op is None,
+                "operator": op,
+                "c": corroboration(ev),
+            })
+    return items
+
+
+def py_files(root):
+    out = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames.sort()
+        for fn in sorted(filenames):
+            if fn.endswith(".py"):
+                out.append(os.path.join(dirpath, fn))
+    out.sort()
+    return out
+
+
+def rename_tree(src, dst, fraction, rng):
+    shutil.copytree(src, dst)
+    for path in py_files(dst):
+        with open(path, encoding="utf-8") as fh:
+            source = fh.read()
+        rewritten = rename_identifiers(source, fraction, rng)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(rewritten)
+
+
+def implemented_class_metrics(preds):
+    n = len(preds)
+    tp = sum(1 for p in preds if p)
+    fn = n - tp
+    fp = 0
+    prec = 1.0 if tp else 0.0
+    rec = tp / n if n else 0.0
+    f1 = (2 * prec * rec / (prec + rec)) if (prec + rec) else 0.0
+    return {
+        "f1": r6(f1),
+        "precision": r6(prec),
+        "recall": r6(rec),
+        "implemented_rate": r6(rec),
+        "n": n,
+        "tp": tp,
+        "fn": fn,
+        "fp": fp,
+    }
+
+
+def e0_sweep(train, embedder):
+    sweep = {}
+    chosen = {}
+    for name in SCORE_POLICIES:
+        rows = []
+        best = None
+        for th in THRESHOLDS:
+            trial = {name: th}
+            m = metrics_for(name, train, trial, embedder)
+            row = {
+                "threshold": r6(th),
+                "precision": m["precision"],
+                "recall": m["recall"],
+                "f1": m["f1"],
+                "false_implemented_rate": m["false_implemented_rate"],
+            }
+            rows.append(row)
+            if best is None or row["f1"] > best["f1"]:
+                best = row
+        sweep[name] = rows
+        chosen[name] = best["threshold"]
+    for name in COUNT_POLICIES:
+        rows = []
+        best = None
+        for k in K_SWEEP:
+            trial = {name: k}
+            m = metrics_for(name, train, trial, embedder)
+            row = {
+                "k_min": k,
+                "precision": m["precision"],
+                "recall": m["recall"],
+                "f1": m["f1"],
+                "false_implemented_rate": m["false_implemented_rate"],
+            }
+            rows.append(row)
+            if best is None or row["f1"] > best["f1"]:
+                best = row
+        sweep[name] = rows
+        chosen[name] = best["k_min"]
+    return sweep, chosen
+
+
+def e3_ablation(pristine, thresholds, embedder):
+    out = {"mode": "implemented_class_f1"}
+    for fi, fraction in enumerate(FRACTIONS):
+        per_policy = {name: [] for name in POLICIES}
+        for pi, (name, (code_dir, claims, _elements)) in enumerate(pristine):
+            rng = random.Random(SEED + 90001 + 100 * fi + (pi + 1))
+            with tempfile.TemporaryDirectory() as tmp:
+                dst = os.path.join(tmp, "code")
+                rename_tree(code_dir, dst, fraction, rng)
+                els = extract_codebase(dst)
+                for claim in claims:
+                    ev = gather(claim, els)
+                    item = {"claim": claim, "elements": els, "evidence": ev}
+                    for pname in POLICIES:
+                        per_policy[pname].append(
+                            apply_policy(pname, item, thresholds, embedder)
+                        )
+        frac_key = str(fraction)
+        block = {}
+        for pname, preds in per_policy.items():
+            block[pname] = implemented_class_metrics(preds)
+            if fraction == 0.0 and all(preds) and preds:
+                block[pname]["f1"] = r6(1.0)
+        out[frac_key] = block
+    return out
+
+
+def e5_calibration(items):
+    bins = {}
+    for it in items:
+        c = int(it["c"])
+        rec = bins.setdefault(c, {"c": c, "n": 0, "n_implemented": 0})
+        rec["n"] += 1
+        if it["truly_implemented"]:
+            rec["n_implemented"] += 1
+    out = {}
+    for c in sorted(bins):
+        rec = bins[c]
+        frac = rec["n_implemented"] / rec["n"] if rec["n"] else 0.0
+        out[str(c)] = {
+            "c": rec["c"],
+            "n": rec["n"],
+            "n_implemented": rec["n_implemented"],
+            "fraction_truly_implemented": r6(frac),
+        }
+    return out
+
+
+def e6_scaling(pristine):
+    out = {}
+    for name, (code_dir, claims, _elements) in pristine:
+        t0 = time.perf_counter()
+        elements = extract_codebase(code_dir)
+        n_ev = 0
+        for claim in claims:
+            n_ev += len(gather(claim, elements))
+        seconds = time.perf_counter() - t0
+        out[name] = {
+            "n_elements": len(elements),
+            "n_claims": len(claims),
+            "n_evidence": n_ev,
+            "seconds": r6(seconds),
+        }
+    return out
+
+
+def run(quick=False):
+    n_rounds = 1 if quick else 3
+    manifest = load_manifest()
+    pristine = []
+    for entry in manifest["projects"]:
+        pristine.append((entry["name"], load_project(entry)))
+    embedder = build_embedder(pristine)
+    items = []
+    for pi, (name, (code_dir, claims, elements)) in enumerate(pristine):
+        for ri in range(n_rounds):
+            rng = random.Random(SEED + 17 * (pi + 1) + 1009 * (ri + 1))
+            items.extend(
+                mutate_items(code_dir, claims, elements, rng, RATE, name, ri)
+            )
+    items.sort(key=lambda it: (it["project"], it["round"], it["cid"]))
+    split_rng = random.Random(SEED)
+    split_rng.shuffle(items)
+    n_train = int(0.6 * len(items))
+    train = items[:n_train]
+    test = items[n_train:]
+    e0, chosen = e0_sweep(train, embedder)
+    e1 = {}
+    for name in POLICIES:
+        e1[name] = metrics_for(name, test, chosen, embedder)
+    e2 = {}
+    for op in OPERATORS:
+        e2[op] = {}
+        for name in POLICIES:
+            e2[op][name] = metrics_for(name, items, chosen, embedder, operator=op)
+    e4 = {
+        "cdc": metrics_for("cdc", items, chosen, embedder),
+        "cdc_counterfactual": metrics_for(
+            "cdc_counterfactual", items, chosen, embedder
+        ),
+    }
+    results = {
+        "seed": SEED,
+        "k_min": K_MIN,
+        "baseline_thresholds": chosen,
+        "e0_threshold_sweep": e0,
+        "e1_main": e1,
+        "e2_by_operator": e2,
+        "e3_identifier_ablation": e3_ablation(pristine, chosen, embedder),
+        "e4_counterfactual": e4,
+        "e5_calibration": e5_calibration(items),
+        "e6_scaling": e6_scaling(pristine),
+    }
+    out_dir = os.path.join(ROOT, "results")
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, "results.json")
+    with open(out_path, "w", encoding="utf-8") as fh:
+        json.dump(results, fh, sort_keys=True, indent=2, separators=(",", ": "))
+        fh.write("\n")
+    return results
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--quick", action="store_true")
+    args = parser.parse_args()
+    run(quick=args.quick)
+
+
+if __name__ == "__main__":
+    main()
