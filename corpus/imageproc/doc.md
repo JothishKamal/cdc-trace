@@ -1,0 +1,39 @@
+# Image processing
+
+## Numeric pipeline
+
+This section is introductory.
+
+convolve_image implements convolution.
+
+resize_image returns a scaled image.
+
+normalize_image returns normalized pixels.
+
+compute_histogram computes the histogram.
+
+convolve_image handles kernel application.
+
+resize_image handles integer scale.
+
+## Image hashing
+
+This section is introductory.
+
+hash_image hashes the image with sha256.
+
+hash_image uses hashlib.
+
+hash_histogram hashes the histogram with sha256.
+
+## Metadata serialisation
+
+This section is introductory.
+
+dump_image_meta uses json serialisation.
+
+load_image_meta uses json.
+
+dump_image_meta returns json text.
+
+load_image_meta parses json payloads.

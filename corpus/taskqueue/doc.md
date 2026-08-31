@@ -1,0 +1,41 @@
+# Task queue
+
+## Payload signatures
+
+This section is introductory.
+
+sign_payload signs the payload with hmac.
+
+sign_payload uses hmac.
+
+verify_payload verifies the payload signature.
+
+verify_payload returns a boolean.
+
+## Task identifiers
+
+This section is introductory.
+
+generate_task_id generates a random id.
+
+generate_task_id uses random bytes.
+
+generate_queue_key generates a random key.
+
+## Queue operations
+
+This section is introductory.
+
+enqueue_task stores the task on the queue.
+
+retry_task handles retry attempts.
+
+retry_task implements retry.
+
+enqueue_task returns the queued item.
+
+## Integrity hashing
+
+This section is introductory.
+
+sign_payload hashes the payload with sha256.

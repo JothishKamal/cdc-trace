@@ -1,0 +1,41 @@
+# Geocoder
+
+## Coordinate cache
+
+This section is introductory.
+
+cache_geocode caches the geocode result.
+
+lookup_geocode returns the cached result.
+
+cache_geocode stores the geocode result.
+
+clear_geocode_cache handles cache reset.
+
+## Http client shape
+
+This section is introductory.
+
+build_geocode_url uses the http client.
+
+build_geocode_url returns an http url.
+
+geocode_fixture handles http lookup.
+
+## Json payloads
+
+This section is introductory.
+
+dump_geocode uses json serialisation.
+
+load_geocode uses json.
+
+dump_geocode returns json text.
+
+load_geocode parses json payloads.
+
+## Query helpers
+
+This section is introductory.
+
+lookup_geocode queries the cache.
