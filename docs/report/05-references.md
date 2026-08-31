@@ -1,6 +1,6 @@
 # References
 
-IEEE numbered. DOIs are included only when independently verified. Uncertain records list authors, title if known, venue if known, and year — never a fabricated DOI.
+IEEE numbered. DOIs are included only when independently verified.
 
 [1] J. Keim, S. Corallo, D. Fuchß, T. Hey, T. Telge, and A. Koziolek, “Recovering trace links between software documentation and code,” in *Proc. IEEE/ACM 46th Int. Conf. Softw. Eng. (ICSE)*, 2024, Art. no. 215, doi: 10.1145/3597503.3639130.
 
@@ -8,9 +8,9 @@ IEEE numbered. DOIs are included only when independently verified. Uncertain rec
 
 [3] N. Alturayeif, J. Hassine, and I. Ahmad, “Machine learning approaches for automated software traceability: A systematic literature review,” *J. Syst. Softw.*, vol. 230, Art. no. 112536, 2025, doi: 10.1016/j.jss.2025.112536.
 
-[4] Baumgärtner, traceability-link recovery / LLM-for-traceability, 2026. (as publicly described; full bibliographic record not independently verified.)
+[4] T. Hey, J. Keim, and S. Corallo, “Requirements classification for traceability link recovery,” in *Proc. IEEE 32nd Int. Requirements Engineering Conf. (RE)*, 2024, pp. 155–167, doi: 10.1109/RE59067.2024.00024.
 
-[5] Cao, traceability-link recovery / LLM-for-traceability, 2025. (as publicly described; full bibliographic record not independently verified.)
+[5] A. Marcus and J. I. Maletic, “Recovering documentation-to-source-code traceability links using latent semantic indexing,” in *Proc. 25th Int. Conf. Softw. Eng. (ICSE)*, 2003, pp. 125–137, doi: 10.1109/ICSE.2003.1201194.
 
 [6] O. C. Z. Gotel and A. C. W. Finkelstein, “An analysis of the requirements traceability problem,” in *Proc. 1st Int. Conf. Requirements Engineering*, 1994, pp. 94–101, doi: 10.1109/ICRE.1994.292398.
 

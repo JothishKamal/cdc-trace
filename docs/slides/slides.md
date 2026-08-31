@@ -32,7 +32,8 @@ Traceability-link recovery treats resemblance as implementation. A stub named `a
 - Keim 2024: documentation–code trace links [1]
 - Fuchß 2025: LiSSA — RAG for generic TLR [2]
 - Alturayeif 2025: ML for automated traceability, SLR [3]
-- Baumgärtner 2026, Cao 2025: LLM-for-traceability / TLR as publicly described [4], [5]
+- Hey, Keim, and Corallo 2024: requirements classification for TLR [4]
+- Marcus and Maletic 2003: documentation–code links via LSI [5]
 
 Shared limit: a recovered link is not independent implementation evidence.
 
@@ -123,8 +124,8 @@ lexical                 20.51 ( 13.0- 30.8)  94.12 ( 73.0- 99.0)  33.68   5.88 (
 [1] Keim et al., ICSE 2024, doi: 10.1145/3597503.3639130.
 [2] Fuchß et al., LiSSA, ICSE 2025, doi: 10.1109/ICSE55347.2025.00186.
 [3] Alturayeif et al., JSS 230, 2025, doi: 10.1016/j.jss.2025.112536.
-[4] Baumgärtner, LLM-for-traceability / TLR, 2026 (as publicly described).
-[5] Cao, LLM-for-traceability / TLR, 2025 (as publicly described).
+[4] T. Hey, J. Keim, and S. Corallo, RE 2024, doi: 10.1109/RE59067.2024.00024.
+[5] A. Marcus and J. I. Maletic, ICSE 2003, doi: 10.1109/ICSE.2003.1201194.
 [6] Gotel and Finkelstein, ICRE 1994, doi: 10.1109/ICRE.1994.292398.
 [7] Cleland-Huang et al., FOSE/ICSE 2014, doi: 10.1145/2593882.2593891.
 [8] Hayes, Dekhtyar, and Sundaram, IEEE TSE 32(1), 2006, doi: 10.1109/TSE.2006.3.
