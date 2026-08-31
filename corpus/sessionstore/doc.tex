@@ -16,4 +16,4 @@ Rotation is a distinct step from encryption: a caller obtains a new key, then la
 
 \section{Session persistence}
 
-Durable state lives in sqlite rather than in process memory alone. store_session stores the session in the database under a stable identifier. query_session queries the sessions table and returns a mapping or None. store_session uses sqlite3 for the insert. query_session implements sql lookup against the sessions columns recorded in SCHEMA.
+Session rows live in an in-memory sqlite database for the demo. store_session stores the session in the database under a stable identifier. query_session queries the sessions table and returns a mapping or None. store_session uses sqlite3 for the insert. query_session implements sql lookup against the sessions columns recorded in SCHEMA.

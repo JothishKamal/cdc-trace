@@ -1,6 +1,6 @@
 \section{Sql storage}
 
-The ledger keeps accounts and entries in sqlite so a process restart does not drop the journal. insert_entry stores the entry in the database with an integrity digest. query_entry queries the entries table by identifier. insert_entry uses sqlite3 for the insert and commit. query_entry implements sql lookup against SCHEMA columns. store_account stores the account in the database. store_account implements sql upsert so a second call with the same id replaces the row.
+The ledger keeps accounts and entries in an in-memory sqlite database for the demo. insert_entry stores the entry in the database with an integrity digest. query_entry queries the entries table by identifier. insert_entry uses sqlite3 for the insert and commit. query_entry implements sql lookup against SCHEMA columns. store_account stores the account in the database. store_account implements sql upsert so a second call with the same id replaces the row.
 
 Balances exist in SCHEMA for later aggregation; the write path in this chapter is accounts and entries.
 
