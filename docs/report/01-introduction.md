@@ -24,7 +24,7 @@ This is the traceability analogue of counting correlated votes as independent wi
 
 Review and audit settings need a different question from TLR. The useful output is not “this sentence is similar to this function.” It is whether a claim is supported by **mutually independent** implementation evidence, and whether that support **survives the loss of any single source** (a name, a docstring, a shared token, a file).
 
-Channel-disjoint corroboration (CDC) gathers evidence through seven provenance-tagged channels (`NAME`, `DOC`, `IMPORT`, `CALL`, `SCHEMA`, `TEST`, `BODY`) and counts only evidence whose provenance sets are pairwise disjoint. `C(claim)` is the size of that largest independent set. A counterfactual check deletes every source in turn; a verdict must survive the loss of any single source. A claim propped up entirely by naming does not survive.
+Channel-disjoint corroboration (CDC) gathers evidence through seven provenance-tagged channels (`NAME`, `DOC`, `IMPORT`, `CALL`, `SCHEMA`, `TEST`, `BODY`) and counts only evidence whose provenance sets are pairwise disjoint. `C(claim)` is the size of that largest independent set. A counterfactual check deletes every source in turn; a verdict must survive the loss of any single source. A claim propped up entirely by naming does not survive. `CALL` and `TEST` emit only when the callee is not a stub and another channel already fired, so `NOMINAL` can demote a claim; this gate is current behaviour, not the original spec table.
 
 The default embedder used by the lexical-semantic baselines is TF-IDF over identifier sub-tokens (numpy only). It is a lexical-semantic proxy, not a neural embedding. That fact is stated in the README and is not hidden.
 
@@ -43,7 +43,7 @@ The default embedder used by the lexical-semantic baselines is TF-IDF over ident
 
 **Deferred as planned Final Review work**
 
-- Live LLM claim-extraction backend. The interface and the cached path exist; live calls are deferred.
+- Live LLM claim-extraction backend.
 - Corpus scale-up beyond the vendored set.
 - Cross-language extraction beyond Python.
 - Oral-probe question generation for high-gap components.

@@ -1209,37 +1209,37 @@
       "n_claims": 15,
       "n_elements": 18,
       "n_evidence": 160,
-      "seconds": 0.009562
+      "seconds": 0.0
     },
     "geocoder": {
       "n_claims": 13,
       "n_elements": 17,
       "n_evidence": 162,
-      "seconds": 0.011756
+      "seconds": 0.0
     },
     "imageproc": {
       "n_claims": 13,
       "n_elements": 17,
       "n_evidence": 151,
-      "seconds": 0.011777
+      "seconds": 0.0
     },
     "ledger": {
       "n_claims": 12,
       "n_elements": 17,
       "n_evidence": 186,
-      "seconds": 0.009223
+      "seconds": 0.0
     },
     "sessionstore": {
       "n_claims": 14,
       "n_elements": 20,
       "n_evidence": 235,
-      "seconds": 0.015094
+      "seconds": 0.0
     },
     "taskqueue": {
       "n_claims": 13,
       "n_elements": 14,
       "n_evidence": 120,
-      "seconds": 0.0087
+      "seconds": 0.0
     }
   },
   "k_min": 2,

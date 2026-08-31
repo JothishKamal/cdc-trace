@@ -61,8 +61,9 @@ def extract_source(source: str, path: str) -> List[CodeElement]:
 def extract_codebase(root: str) -> List[CodeElement]:
     elements: List[CodeElement] = []
     extra_entries: Set[str] = set()
-    for dirpath, _, filenames in os.walk(root):
-        for filename in filenames:
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames.sort()
+        for filename in sorted(filenames):
             if not filename.endswith(".py"):
                 continue
             full = os.path.join(dirpath, filename)

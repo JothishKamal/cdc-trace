@@ -9,8 +9,8 @@ Pipeline from documents and code to gap scores. Module numbers match the specifi
        (Markdown / LaTeX)                     (Python repo)
               |                                     |
       [300] claim extraction              [200] code extraction
-      rule-based default,                 AST inventory, call graph,
-      LLM backend (cached)                routes, schema, imports, tests
+      rule-based default                   AST inventory, call graph,
+      (LLM backend deferred)               routes, schema, imports, tests
               |                                     |
               +------------------+------------------+
                                  |

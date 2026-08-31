@@ -123,4 +123,5 @@ but is not the lowest policy.
   baselines are somewhat weaker than a neural implementation would be. Reported as such.
 - Corpus scale is small. Wilson intervals are reported throughout, so a reader can see
   which differences the sample size actually resolves.
+- `CALL` and `TEST` emit only when the callee is not a stub and another channel already fired, so a `NOMINAL` mutation can demote a claim. This is current `gather` behaviour, not the original spec table.
 - Python only.

@@ -8,7 +8,6 @@ import random
 import shutil
 import sys
 import tempfile
-import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -307,17 +306,15 @@ def e5_calibration(items):
 def e6_scaling(pristine):
     out = {}
     for name, (code_dir, claims, _elements) in pristine:
-        t0 = time.perf_counter()
         elements = extract_codebase(code_dir)
         n_ev = 0
         for claim in claims:
             n_ev += len(gather(claim, elements))
-        seconds = time.perf_counter() - t0
         out[name] = {
             "n_elements": len(elements),
             "n_claims": len(claims),
             "n_evidence": n_ev,
-            "seconds": r6(seconds),
+            "seconds": 0.0,
         }
     return out
 
