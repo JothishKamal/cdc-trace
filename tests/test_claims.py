@@ -69,6 +69,11 @@ def test_claim_ids_are_stable_and_unique():
     assert a == b and len(set(a)) == len(a)
 
 
+def test_assertive_verbs_match_whole_tokens_only():
+    claims = extract_claims("## Users\n\nThe user profile is optional.\n", "md")
+    assert claims == []
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:

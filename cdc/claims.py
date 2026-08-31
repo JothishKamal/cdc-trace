@@ -105,12 +105,7 @@ def _claims_from_pairs(pairs: List[Tuple[str, str]]) -> list[Claim]:
 
 def _is_assertive(sentence: str) -> bool:
     tokens = [tok.lower() for tok in re.split(r"[^A-Za-z0-9]+", sentence) if tok]
-    for tok in tokens:
-        if tok in ASSERTIVE_VERBS:
-            return True
-        if any(tok.startswith(verb) for verb in ASSERTIVE_VERBS):
-            return True
-    return False
+    return any(tok in ASSERTIVE_VERBS for tok in tokens)
 
 
 def _kind(sentence: str) -> str:
