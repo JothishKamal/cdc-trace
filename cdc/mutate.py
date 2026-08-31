@@ -41,26 +41,14 @@ class Mutation:
     claim_cid: str
 
 
-def mutate_source(source: str, target_name: str, operator: str) -> str:
+def mutate_source(
+    source: str,
+    target_name: str,
+    operator: str,
+    lineno: Optional[int] = None,
+) -> str:
     tree = ast.parse(source)
-    if operator == "DELETE":
-        _delete_function(tree, target_name)
-    elif operator == "RENAME":
-        for func in _matching_functions(tree, target_name):
-            func.name = f"_mutated_{func.name}"
-    elif operator == "WEAKEN":
-        for func in _matching_functions(tree, target_name):
-            _weaken_function(func)
-    elif operator == "STUB":
-        for func in _matching_functions(tree, target_name):
-            func.body = [ast.Raise(
-                exc=ast.Name(id="NotImplementedError", ctx=ast.Load()),
-                cause=None,
-            )]
-    elif operator == "NOMINAL":
-        for func in _matching_functions(tree, target_name):
-            _nominal_function(func)
-        _drop_unused_imports(tree)
+    _apply_operator(tree, target_name, operator, lineno)
     ast.fix_missing_locations(tree)
     return ast.unparse(tree)
 
@@ -82,14 +70,14 @@ def apply_mutations(
     rng.shuffle(pool)
     chosen = pool[: math.floor(rate * len(pool))]
     records: list[Mutation] = []
+    trees: dict[str, ast.AST] = {}
     for el in chosen:
         operator = rng.choice(OPERATORS)
         path = _join(dst_root, el.path)
-        with open(path, encoding="utf-8") as fh:
-            source = fh.read()
-        mutated = mutate_source(source, el.name, operator)
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(mutated)
+        if path not in trees:
+            with open(path, encoding="utf-8") as fh:
+                trees[path] = ast.parse(fh.read())
+        _apply_operator(trees[path], el.name, operator, el.lineno)
         records.append(Mutation(
             operator=operator,
             target_uid=el.uid,
@@ -97,6 +85,10 @@ def apply_mutations(
             path=el.path,
             claim_cid=_claim_cid(claims, el),
         ))
+    for path, tree in trees.items():
+        ast.fix_missing_locations(tree)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(ast.unparse(tree))
     return records
 
 
@@ -130,26 +122,65 @@ def rename_identifiers(source: str, fraction: float, rng) -> str:
     return ast.unparse(tree)
 
 
-def _matching_functions(tree: ast.AST, target_name: str) -> List[_Func]:
+def _apply_operator(
+    tree: ast.AST,
+    target_name: str,
+    operator: str,
+    lineno: Optional[int] = None,
+) -> None:
+    if operator == "DELETE":
+        _delete_function(tree, target_name, lineno)
+    elif operator == "RENAME":
+        for func in _matching_functions(tree, target_name, lineno):
+            func.name = f"_mutated_{func.name}"
+    elif operator == "WEAKEN":
+        for func in _matching_functions(tree, target_name, lineno):
+            _weaken_function(func)
+    elif operator == "STUB":
+        for func in _matching_functions(tree, target_name, lineno):
+            func.body = [ast.Raise(
+                exc=ast.Name(id="NotImplementedError", ctx=ast.Load()),
+                cause=None,
+            )]
+    elif operator == "NOMINAL":
+        for func in _matching_functions(tree, target_name, lineno):
+            _nominal_function(func)
+        _drop_unused_imports(tree)
+
+
+def _is_target_func(node: ast.AST, target_name: str, lineno: Optional[int]) -> bool:
+    if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        return False
+    if node.name != target_name:
+        return False
+    return lineno is None or node.lineno == lineno
+
+
+def _matching_functions(
+    tree: ast.AST, target_name: str, lineno: Optional[int] = None,
+) -> List[_Func]:
     return [
         node for node in ast.walk(tree)
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-        and node.name == target_name
+        if _is_target_func(node, target_name, lineno)
     ]
 
 
-def _delete_function(tree: ast.AST, target_name: str) -> None:
+def _delete_function(
+    tree: ast.AST, target_name: str, lineno: Optional[int] = None,
+) -> None:
     for node in ast.walk(tree):
         body = getattr(node, "body", None)
         if not isinstance(body, list):
             continue
         node.body = [
             stmt for stmt in body
-            if not (
-                isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef))
-                and stmt.name == target_name
-            )
+            if not _is_target_func(stmt, target_name, lineno)
         ]
+        if (
+            isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+            and not node.body
+        ):
+            node.body = [ast.Pass()]
 
 
 def _weaken_function(func: _Func) -> None:

@@ -2,10 +2,12 @@
 import ast
 import os
 import sys
+import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from cdc.mutate import OPERATORS, mutate_source
+from cdc.model import Claim, CodeElement
+from cdc.mutate import OPERATORS, apply_mutations, mutate_source
 
 SRC = '''
 import hashlib
@@ -59,6 +61,64 @@ def test_nominal_keeps_name_and_docstring_but_guts_the_body():
 def test_every_operator_produces_parseable_python():
     for op in OPERATORS:
         ast.parse(mutate_source(SRC, "digest_token", op))
+
+
+def test_delete_only_method_keeps_class_parseable():
+    src = "class Foo:\n    def bar(self):\n        return 1\n"
+    out = mutate_source(src, "bar", "DELETE")
+    tree = ast.parse(out)
+    foo = next(n for n in tree.body if isinstance(n, ast.ClassDef))
+    assert foo.name == "Foo"
+    assert "bar" not in names(out)
+
+
+def test_apply_mutations_targets_single_homonym():
+    src_text = (
+        "class A:\n"
+        "    def run(self):\n"
+        "        return 'a'\n"
+        "\n"
+        "class B:\n"
+        "    def run(self):\n"
+        "        return 'b'\n"
+    )
+    parsed = ast.parse(src_text)
+    a_run = parsed.body[0].body[0]
+    el = CodeElement(
+        uid="m:A.run", kind="method", name="run", path="m.py",
+        lineno=a_run.lineno, doc="", imports=frozenset(),
+        calls=frozenset(), body_ops=frozenset(), is_stub=False, reachable=True,
+    )
+    claim = Claim(
+        cid="c1", component="c", text="t", kind="algorithm",
+        terms=frozenset({"run"}), implied_libs=frozenset(), section="s",
+    )
+
+    class _DeleteRng:
+        def shuffle(self, x):
+            pass
+
+        def choice(self, seq):
+            return "DELETE"
+
+    with tempfile.TemporaryDirectory() as tmp:
+        src_root = os.path.join(tmp, "src")
+        dst_root = os.path.join(tmp, "dst")
+        os.makedirs(src_root)
+        with open(os.path.join(src_root, "m.py"), "w", encoding="utf-8") as fh:
+            fh.write(src_text)
+        muts = apply_mutations(
+            src_root, dst_root, [claim], [el], _DeleteRng(), rate=1.0,
+        )
+        assert len(muts) == 1 and muts[0].target_uid == "m:A.run"
+        with open(os.path.join(dst_root, "m.py"), encoding="utf-8") as fh:
+            out = fh.read()
+    tree = ast.parse(out)
+    class_a = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "A")
+    class_b = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "B")
+    assert not any(isinstance(n, ast.FunctionDef) and n.name == "run" for n in class_a.body)
+    b_runs = [n for n in class_b.body if isinstance(n, ast.FunctionDef)]
+    assert len(b_runs) == 1 and b_runs[0].name == "run"
 
 
 if __name__ == "__main__":
