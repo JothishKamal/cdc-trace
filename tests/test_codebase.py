@@ -74,6 +74,20 @@ def test_schema_elements_are_extracted():
     assert tables == {"sessions", "users"}
 
 
+def test_nested_def_ops_do_not_leak_into_outer():
+    src = '''
+def outer():
+    def inner():
+        hashlib.md5(b"x")
+    return 1
+'''
+    els = by_name(extract_source(src, "mod.py"))
+    assert "md5" not in els["outer"].calls
+    assert "op:hash_weak" not in els["outer"].body_ops
+    assert "md5" in els["inner"].calls
+    assert "op:hash_weak" in els["inner"].body_ops
+
+
 def test_reachability_is_transitive_from_entry_points():
     with tempfile.TemporaryDirectory() as d:
         with open(os.path.join(d, "app.py"), "w", encoding="utf-8") as fh:

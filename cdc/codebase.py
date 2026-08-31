@@ -315,6 +315,8 @@ def _calls_and_ops(node: _Func) -> Tuple[Set[str], Set[str]]:
 
 def _walk_skip_nested(stmts: Iterable[ast.AST]) -> Iterable[ast.AST]:
     for stmt in stmts:
+        if isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            continue
         yield stmt
         for child in ast.iter_child_nodes(stmt):
             if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
