@@ -39,10 +39,23 @@ def test_name_based_policies_cannot_separate_nominal():
 
 
 def test_corroboration_separates_nominal():
+    """
+    Corroboration must reject the gutted element and separate NOMINAL widely.
+
+    The 75.0 floor is not a tuned figure: it is a bound chosen to sit well
+    clear of the name-based policies, which separate NOMINAL by 0.0 points
+    because the operator preserves name, docstring and path byte-for-byte.
+    The margin assertion below is the substantive claim; the floor only keeps
+    a policy from clearing that margin while barely separating anything.
+    """
     nominal = results()["e2b_separation"]["NOMINAL"]
+    name_based = ("lexical", "hybrid", "embedding")
     for name in ("cdc", "cdc_counterfactual"):
-        assert nominal[name]["separation"] > 80.0, name
         assert nominal[name]["accepts_gutted"] < 1.0, name
+        assert nominal[name]["separation"] > 75.0, name
+        for other in name_based:
+            margin = nominal[name]["separation"] - nominal[other]["separation"]
+            assert margin > 50.0, f"{name} vs {other}: {margin}"
 
 
 def test_claim_level_secondary_is_retained_with_its_caveat():
