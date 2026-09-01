@@ -25,6 +25,8 @@ PREFERRED = (
     "cdc",
     "cdc_counterfactual",
 )
+MARKERS = ("o", "s", "^", "D", "v", "P", "X")
+DASHES = ("-", "--", "-.", ":", (0, (3, 1, 1, 1)), (0, (5, 2)), (0, (1, 1)))
 
 
 def load_results():
@@ -177,48 +179,71 @@ def fig2_dependent_example(path):
     save(fig, path)
 
 
-def fig3_policy_comparison(res, path):
-    e1 = res.get("e1_main", {})
-    fig, ax = plt.subplots(figsize=(10.5, 5.6), layout="constrained")
+def fig3_separation(res, path, operator="NOMINAL"):
+    """Accepts-pristine against accepts-gutted per policy, one operator."""
+    sep = res.get("e2b_separation", {})
+    block = sep.get(operator, {}) if isinstance(sep, dict) else {}
+    fig, ax = plt.subplots(figsize=(10.5, 5.8), layout="constrained")
     ax.set_xlabel("Policy")
-    ax.set_ylabel("Score")
-    ax.set_title("E1 policy comparison (held-out, gap class)")
-    ax.set_ylim(0.0, 1.05)
+    ax.set_ylabel("Acceptance rate")
+    ax.set_title(
+        f"E2b pristine-versus-gutted separation ({operator})"
+    )
+    ax.set_ylim(0.0, 1.35)
 
-    if not isinstance(e1, dict) or not e1:
+    if not isinstance(block, dict) or not block:
         save(fig, path)
         return
 
-    policies = ordered_policies(e1.keys())
-    f1s, firs = [], []
-    lo_err, hi_err = [], []
-    have_ci = True
-    for p in policies:
-        m = e1.get(p) or {}
-        f1s.append(float(m.get("f1", 0.0)))
-        fir = float(m.get("false_implemented_rate", 0.0))
-        firs.append(fir)
-        k, n = m.get("n_false_implemented"), m.get("n_mutated")
-        if isinstance(k, (int, float)) and isinstance(n, (int, float)):
-            lo, hi = wilson(int(k), int(n))
-            lo_err.append(max(0.0, fir - lo))
-            hi_err.append(max(0.0, hi - fir))
-        else:
-            have_ci = False
+    policies = ordered_policies(block.keys())
+    n = 0
+    pris, gut, seps = [], [], []
+    pris_err = [[], []]
+    gut_err = [[], []]
+    for name in policies:
+        row = block.get(name) or {}
+        n = int(row.get("n") or 0)
+        p = float(row.get("accepts_pristine", 0.0)) / 100.0
+        g = float(row.get("accepts_gutted", 0.0)) / 100.0
+        pris.append(p)
+        gut.append(g)
+        seps.append(float(row.get("separation", 0.0)))
+        for val, key, err in (
+            (p, "n_accepts_pristine", pris_err),
+            (g, "n_accepts_gutted", gut_err),
+        ):
+            k = row.get(key)
+            if isinstance(k, (int, float)) and n:
+                lo, hi = wilson(int(k), n)
+                err[0].append(max(0.0, val - lo))
+                err[1].append(max(0.0, hi - val))
+            else:
+                err[0].append(0.0)
+                err[1].append(0.0)
 
     x = list(range(len(policies)))
     w = 0.38
     xl = [i - w / 2 for i in x]
     xr = [i + w / 2 for i in x]
-    ax.bar(xl, f1s, w, label="F1")
-    if have_ci and lo_err and hi_err:
-        ax.bar(xr, firs, w, label="False-implemented rate",
-               yerr=[lo_err, hi_err], capsize=3, error_kw={"linewidth": 1.0})
-    else:
-        ax.bar(xr, firs, w, label="False-implemented rate")
+    ax.bar(xl, pris, w, label="Accepts pristine element",
+           color="#2e86c1", edgecolor="white", linewidth=0.8,
+           yerr=pris_err, capsize=3, error_kw={"linewidth": 1.0})
+    ax.bar(xr, gut, w, label="Accepts gutted element",
+           color="#c0392b", edgecolor="white", linewidth=0.8,
+           yerr=gut_err, capsize=3, error_kw={"linewidth": 1.0})
+    for i, s in enumerate(seps):
+        ax.text(i, 1.05, f"sep {s:.1f} pp", ha="center", va="center", fontsize=8)
     ax.set_xticks(x)
     ax.set_xticklabels(policies, rotation=25, ha="right")
-    ax.legend()
+    ax.legend(loc="upper center", ncol=2, fontsize=8, framealpha=1.0)
+    ax.text(
+        0.0, -0.30,
+        f"n = {n} mutated (claim, element) pairs. Bars carry Wilson 95%"
+        " intervals.\nOnly the gap between the two bars is skill: a policy"
+        " that refuses everything\nseparates nothing while scoring a"
+        " flattering false-implemented rate.",
+        transform=ax.transAxes, fontsize=8, va="top",
+    )
     save(fig, path)
 
 
@@ -259,10 +284,20 @@ def fig4_ablation(res, path):
                 xs.append(frac)
                 ys.append(float(rec["f1"]))
         if xs:
-            ax.plot(xs, ys, marker="o", label=policy)
+            # Several policies sit at F1 = 1.0 for the whole sweep. Distinct
+            # dash patterns and markers keep a hidden line visible under the
+            # one drawn on top of it.
+            i = policies.index(policy)
+            ax.plot(
+                xs, ys,
+                marker=MARKERS[i % len(MARKERS)],
+                linestyle=DASHES[i % len(DASHES)],
+                markersize=6 - 0.4 * i, linewidth=1.6,
+                label=policy,
+            )
 
     if policies:
-        ax.legend(loc="best", fontsize=8)
+        ax.legend(loc="lower left", fontsize=8)
     save(fig, path)
 
 
@@ -292,9 +327,19 @@ def fig5_calibration(res, path):
     if rows:
         cs = [r[0] for r in rows]
         fracs = [r[1] for r in rows]
-        ax.bar(cs, fracs, width=0.6)
+        err = [[], []]
+        for _c, frac, n, n_impl in rows:
+            if isinstance(n, (int, float)) and isinstance(n_impl, (int, float)):
+                lo, hi = wilson(int(n_impl), int(n))
+                err[0].append(max(0.0, frac - lo))
+                err[1].append(max(0.0, hi - frac))
+            else:
+                err[0].append(0.0)
+                err[1].append(0.0)
+        ax.bar(cs, fracs, width=0.6, yerr=err, capsize=4,
+               error_kw={"linewidth": 1.0})
         ax.set_xticks(cs)
-        for c, frac, n, n_impl in rows:
+        for i, (c, frac, n, n_impl) in enumerate(rows):
             label = f"{frac:.2f}"
             extra = []
             if isinstance(n, (int, float)):
@@ -303,7 +348,9 @@ def fig5_calibration(res, path):
                 extra.append(f"{int(n_impl)} impl.")
             if extra:
                 label = f"{label}\n" + "\n".join(extra)
-            ax.text(c, min(frac + 0.04, 1.08), label, ha="center", va="bottom", fontsize=8)
+            top = min(frac + err[1][i] + 0.02, 1.15)
+            ax.text(c, top, label, ha="center", va="bottom", fontsize=8)
+        ax.set_ylim(0.0, 1.32)
     save(fig, path)
 
 
@@ -350,6 +397,14 @@ def fig6_operator_heatmap(res, path):
                 continue
             color = "white" if val < 0.45 else "black"
             ax.text(j, i, f"{val:.2f}", ha="center", va="center", color=color, fontsize=8)
+    if "DELETE" in operators:
+        ax.text(
+            0.0, -0.12,
+            "DELETE removes the element from the tree entirely, so every"
+            " policy scores 1.00 there by construction:\nthose pairs are free"
+            " true positives, not evidence of detection.",
+            transform=ax.transAxes, fontsize=8, va="top",
+        )
     save(fig, path)
 
 
@@ -358,7 +413,7 @@ def main():
     os.makedirs(ASSETS, exist_ok=True)
     fig1_pipeline(os.path.join(ASSETS, "fig1.png"))
     fig2_dependent_example(os.path.join(ASSETS, "fig2.png"))
-    fig3_policy_comparison(res, os.path.join(ASSETS, "fig3.png"))
+    fig3_separation(res, os.path.join(ASSETS, "fig3.png"))
     fig4_ablation(res, os.path.join(ASSETS, "fig4.png"))
     fig5_calibration(res, os.path.join(ASSETS, "fig5.png"))
     fig6_operator_heatmap(res, os.path.join(ASSETS, "fig6.png"))
