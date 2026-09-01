@@ -417,6 +417,99 @@
       "tp": 36
     }
   },
+  "e1_main_excluding_delete": {
+    "cdc": {
+      "f1": 0.384906,
+      "false_implemented_rate": 0.072727,
+      "fn": 4,
+      "fp": 159,
+      "n": 418,
+      "n_false_implemented": 4,
+      "n_mutated": 55,
+      "precision": 0.242857,
+      "recall": 0.927273,
+      "tn": 204,
+      "tp": 51
+    },
+    "cdc_counterfactual": {
+      "f1": 0.359862,
+      "false_implemented_rate": 0.054545,
+      "fn": 3,
+      "fp": 182,
+      "n": 418,
+      "n_false_implemented": 3,
+      "n_mutated": 55,
+      "precision": 0.222222,
+      "recall": 0.945455,
+      "tn": 181,
+      "tp": 52
+    },
+    "channel_count": {
+      "f1": 0.333333,
+      "false_implemented_rate": 0.2,
+      "fn": 11,
+      "fp": 165,
+      "n": 418,
+      "n_false_implemented": 11,
+      "n_mutated": 55,
+      "precision": 0.210526,
+      "recall": 0.8,
+      "tn": 198,
+      "tp": 44
+    },
+    "embedding": {
+      "f1": 0.3125,
+      "false_implemented_rate": 0.636364,
+      "fn": 35,
+      "fp": 53,
+      "n": 418,
+      "n_false_implemented": 35,
+      "n_mutated": 55,
+      "precision": 0.273973,
+      "recall": 0.363636,
+      "tn": 310,
+      "tp": 20
+    },
+    "evidence_count": {
+      "f1": 0.333333,
+      "false_implemented_rate": 0.2,
+      "fn": 11,
+      "fp": 165,
+      "n": 418,
+      "n_false_implemented": 11,
+      "n_mutated": 55,
+      "precision": 0.210526,
+      "recall": 0.8,
+      "tn": 198,
+      "tp": 44
+    },
+    "hybrid": {
+      "f1": 0.330827,
+      "false_implemented_rate": 0.6,
+      "fn": 33,
+      "fp": 56,
+      "n": 418,
+      "n_false_implemented": 33,
+      "n_mutated": 55,
+      "precision": 0.282051,
+      "recall": 0.4,
+      "tn": 307,
+      "tp": 22
+    },
+    "lexical": {
+      "f1": 0.304636,
+      "false_implemented_rate": 0.581818,
+      "fn": 32,
+      "fp": 73,
+      "n": 418,
+      "n_false_implemented": 32,
+      "n_mutated": 55,
+      "precision": 0.239583,
+      "recall": 0.418182,
+      "tn": 290,
+      "tp": 23
+    }
+  },
   "e2_by_operator": {
     "DELETE": {
       "cdc": {

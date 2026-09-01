@@ -481,6 +481,13 @@ def run(quick=False):
     e1 = {}
     for name in POLICIES:
         e1[name] = metrics_for(name, test, chosen, embedder)
+    # DELETE removes the element outright, so no policy can accept what is no
+    # longer there and every DELETE pair is a free true positive. The same
+    # table without those pairs shows how much of E1 rests on them.
+    test_no_delete = [it for it in test if it["operator"] != "DELETE"]
+    e1_no_delete = {}
+    for name in POLICIES:
+        e1_no_delete[name] = metrics_for(name, test_no_delete, chosen, embedder)
     # The retained diagnostic is the original computation end to end: its own
     # sweep on its own training split, so it is comparable with what was
     # published before, not a pair-level table relabelled.
@@ -511,6 +518,7 @@ def run(quick=False):
         "baseline_thresholds": chosen,
         "e0_threshold_sweep": e0,
         "e1_main": e1,
+        "e1_main_excluding_delete": e1_no_delete,
         "e1_claim_level_secondary": e1_secondary,
         "e2_by_operator": e2,
         "e2b_separation": e2b_separation(items, chosen, embedder),
