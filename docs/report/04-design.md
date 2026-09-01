@@ -72,7 +72,7 @@ flowchart LR
   Analyst((Analyst)) --> UC1[Extract claims and code]
   Analyst --> UC2[Score a document]
   Analyst --> UC3[Compare policies on mutations]
-  Analyst --> UC4[Print E1/E2/E4 tables]
+  Analyst --> UC4[Print separation and E1/E2/E4 tables]
   Analyst --> UC5[Render figures]
   UC3 --> UC4
 ```
@@ -136,3 +136,16 @@ sequenceDiagram
 ```
 
 For evaluation, module 700 copies the tree, applies an operator, and records the targeted claim. Module 800 scores each policy on the gap class (not implemented) and writes `results/results.json`.
+
+## Evaluation design
+
+Scoring is at **(claim, element) granularity**: one evaluation pair per claim that had evidence on that element before the mutation. This is a correction. The original design labelled at claim level, marking a claim as a gap whenever its single lexical best-match element was mutated; measured on this corpus, 141 of 161 such claims remain genuinely implemented by other elements, so those labels were wrong and understated every evidence-based policy. The mis-specified table is retained in the README as a captioned diagnostic rather than deleted.
+
+The **primary** comparison is `e2b_separation`: for each operator, the rate at which a policy accepts the pristine element against the rate at which it accepts the same element after mutation. Only that gap is skill — a policy that accepts nothing scores a flattering false-implemented rate while separating nothing. On `NOMINAL` (name and docstring kept, body gutted) `lexical`, `embedding` and `hybrid` separate by exactly 0.0 pp at every threshold in the sweep grid, while `cdc` separates by 100.0 pp.
+
+Two properties of the harness constrain how its tables may be read, and both are design facts rather than incidental results:
+
+- The 60/40 split behind the E1 table is **not group-aware**. The same `(project, cid, uid)` pair can appear on both sides of it across mutation rounds, so E1 is optimistic by an unmeasured amount and is not a held-out result. The separation table is not split-based and is the artifact to cite.
+- `DELETE` removes the element from the tree, so on that operator no policy can accept anything and the gutted column is 0.0 for all seven policies by construction. Its pairs are free true positives and the row is a sanity check, not a discriminator. The DELETE n in the separation table (32, over all pairs) and the DELETE count inside the E1 test split (13, of 431 pairs) are different populations.
+
+Two engine behaviours limit what the operators can measure. `cdc/mutate.py` weakens an algorithm by mapping `sha256` to `md5`, and `cdc/codebase.py` maps `md5` to `op:hash_weak` rather than dropping the operation, so `BODY` still fires after the weakening and `cdc` separates `WEAKEN` by 0.0 pp (n = 19) where `cdc_counterfactual` reaches 15.8 pp: a limitation of the operation vocabulary, not a bug. And `CALL` and `TEST` emit only when the callee is not a stub and another channel already fired, so a `NOMINAL` mutation can demote a claim; this is current `gather` behaviour, not the original spec table. The same gate is what makes counterfactual ablation expensive on thinly tested code: `cdc_counterfactual` accepts 79.59% of pristine `NOMINAL` pairs against `cdc`'s 100.00%, because `ledger schema:connect_memory` is called but no test calls it, so ablating `ch:CALL` collapses it. `cdc` is therefore the better default policy and `cdc_counterfactual` the stricter one.
