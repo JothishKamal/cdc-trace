@@ -365,8 +365,6 @@ def e3_ablation(pristine, thresholds, embedder):
         block = {}
         for pname, preds in per_policy.items():
             block[pname] = implemented_class_metrics(preds)
-            if fraction == 0.0 and all(preds) and preds:
-                block[pname]["f1"] = r6(1.0)
         out[frac_key] = block
     return out
 
