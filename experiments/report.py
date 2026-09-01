@@ -176,9 +176,9 @@ def print_e5(res):
 def print_e1_secondary(res):
     sec = res["e1_claim_level_secondary"]
     heading("E1 secondary: claim-level labelling (diagnostic only)")
-    print(sec["caveat"])
     print("thresholds:", json.dumps(sec.get("thresholds", {}), sort_keys=True))
     rule()
+    print(sec["caveat"])
     gap_table(sec["policies"])
 
 
