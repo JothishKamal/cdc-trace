@@ -65,39 +65,78 @@ The name and docstring remain; the body does not.
 python experiments/report.py
 ```
 
-Expected (copied from a real run; `seed=20260902`, `k_min=2`):
+The primary comparison is **separation**: how much more often a policy accepts the pristine element than the same element after the mutation. Say this before the table goes up: *a policy that accepts nothing scores a low false-implemented rate without any skill, so a false-implemented rate on its own is not evidence — only the gap between the two columns is.*
+
+Expected, on `NOMINAL` — name and docstring kept, body gutted (`seed=20260902`, `k_min=2`; thresholds `channel_count` 3, `embedding` 0.1, `evidence_count` 3, `hybrid` 0.1, `lexical` 0.1):
 
 ```
-seed=20260902  k_min=2
-baseline_thresholds: {"channel_count": 4, "embedding": 0.6, "evidence_count": 4, "hybrid": 0.5, "lexical": 0.4}
+[NOMINAL]  n = 49 mutated pairs
+------------------------------------------------------------------------------------------------
+policy                  accepts pristine % (95% CI)    accepts gutted % (95% CI)  sep. pp
+lexical                         75.51 ( 61.9- 85.4)          75.51 ( 61.9- 85.4)      0.0
+embedding                       79.59 ( 66.4- 88.5)          79.59 ( 66.4- 88.5)      0.0
+hybrid                          77.55 ( 64.1- 87.0)          77.55 ( 64.1- 87.0)      0.0
+evidence_count                  91.84 ( 80.8- 96.8)          14.29 (  7.1- 26.7)     77.6
+channel_count                   91.84 ( 80.8- 96.8)          14.29 (  7.1- 26.7)     77.6
+cdc                            100.00 ( 92.7-100.0)           0.00 (  0.0-  7.3)    100.0
+cdc_counterfactual              79.59 ( 66.4- 88.5)           0.00 (  0.0-  7.3)     79.6
+```
 
-=== E1 main comparison (held-out, gap class) ===
+Say out loud: **on `NOMINAL`, `lexical`, `embedding` and `hybrid` separate by exactly 0.0 points, and `cdc` separates by 100.0.** Not close to zero — the identical number in both columns. They accept a gutted function at precisely the rate they accept a working one, so they carry no information about whether the body exists. If asked whether that is a threshold artefact: no, and it was checked — separation is 0.0 for those three policies at every point of the sweep grid (seven thresholds, 0.1 to 0.7, crossed with every swept `k_min`). It cannot be otherwise, because name, docstring and path are the only inputs those three policies read and `NOMINAL` leaves all three byte-for-byte unchanged.
+
+Separation in percentage points across all five operators (n = 49 / 40 / 19 / 29 / 32 mutated pairs):
+
+| policy | NOMINAL | STUB | WEAKEN | RENAME | DELETE † |
+|---|---:|---:|---:|---:|---:|
+| `lexical` | 0.0 | 20.0 | 0.0 | 0.0 | 81.2 |
+| `embedding` | 0.0 | 35.0 | 0.0 | 0.0 | 93.8 |
+| `hybrid` | 0.0 | 30.0 | 0.0 | 3.4 | 90.6 |
+| `evidence_count` | 77.6 | 75.0 | 5.3 | 86.2 | 100.0 |
+| `channel_count` | 77.6 | 75.0 | 5.3 | 86.2 | 100.0 |
+| `cdc` | 100.0 | 77.5 | 0.0 | 100.0 | 100.0 |
+| `cdc_counterfactual` | 79.6 | 72.5 | 15.8 | 100.0 | 100.0 |
+
+† Volunteer this before anyone asks: `DELETE` removes the element from the tree entirely, so its gutted column is 0.0 for all seven policies **by construction** and its pairs are free true positives. It is a sanity check, not a discriminator. Its n here (32, over all pairs) is a different population from the 13 `DELETE` pairs inside the E1 test split below; do not present them as the same quantity.
+
+Volunteer the weak operator too: **`WEAKEN` is where the method is weakest.** `cdc` separates it by 0.0 pp (n = 19) and `cdc_counterfactual` beats `cdc` there at 15.8 pp. `cdc/mutate.py` weakens an algorithm by mapping `sha256` to `md5`, and `cdc/codebase.py` maps `md5` to `op:hash_weak` rather than dropping the operation, so `BODY` still fires after the algorithm has been weakened. That is a limit of the operation vocabulary, not a bug, and it is not hidden.
+
+Then the pair-level table:
+
+```
+=== E1 pair-level comparison (gap class) ===
+n = 431 (claim, element) pairs; 68 carry a gap-inducing mutation
 policy                    prec % (95% CI)     rec % (95% CI)     F1     FIR % (95% CI)
-cdc                    100.00 ( 51.0-100.0)  23.53 (  9.6- 47.3)  38.10  76.47 ( 52.7- 90.4)
-cdc_counterfactual      40.00 ( 16.8- 68.7)  23.53 (  9.6- 47.3)  29.63  76.47 ( 52.7- 90.4)
-channel_count           50.00 ( 23.7- 76.3)  29.41 ( 13.3- 53.1)  37.04  70.59 ( 46.9- 86.7)
-embedding               21.54 ( 13.3- 33.0)  82.35 ( 59.0- 93.8)  34.15  17.65 (  6.2- 41.0)
-evidence_count          80.00 ( 37.6- 96.4)  23.53 (  9.6- 47.3)  36.36  76.47 ( 52.7- 90.4)
-hybrid                  21.13 ( 13.2- 32.0)  88.24 ( 65.7- 96.7)  34.09  11.76 (  3.3- 34.3)
-lexical                 20.51 ( 13.0- 30.8)  94.12 ( 73.0- 99.0)  33.68   5.88 (  1.0- 27.0)
+lexical                 33.03 ( 24.9- 42.3)  52.94 ( 41.2- 64.3)  40.68  47.06 ( 35.7- 58.8)
+embedding               38.37 ( 28.8- 48.9)  48.53 ( 37.1- 60.2)  42.86  51.47 ( 39.8- 62.9)
+hybrid                  38.46 ( 29.1- 48.7)  51.47 ( 39.8- 62.9)  44.03  48.53 ( 37.1- 60.2)
+evidence_count          25.68 ( 20.4- 31.8)  83.82 ( 73.3- 90.7)  39.31  16.18 (  9.3- 26.7)
+channel_count           25.68 ( 20.4- 31.8)  83.82 ( 73.3- 90.7)  39.31  16.18 (  9.3- 26.7)
+cdc                     28.70 ( 23.2- 35.0)  94.12 ( 85.8- 97.7)  43.99   5.88 (  2.3- 14.2)
+cdc_counterfactual      26.32 ( 21.2- 32.1)  95.59 ( 87.8- 98.5)  41.27   4.41 (  1.5- 12.2)
 
-=== E2 NOMINAL false-implemented rate ===
-policy                     FIR % (95% CI)
-cdc                     75.00 ( 46.8- 91.1)
-cdc_counterfactual      75.00 ( 46.8- 91.1)
-channel_count           66.67 ( 39.1- 86.2)
-embedding                8.33 (  1.5- 35.4)
-evidence_count          75.00 ( 46.8- 91.1)
-hybrid                   8.33 (  1.5- 35.4)
-lexical                  8.33 (  1.5- 35.4)
-
-=== E4 cdc vs cdc_counterfactual ===
-policy                     F1     FIR % (95% CI)
-cdc                     36.36  77.78 ( 63.7- 87.5)
-cdc_counterfactual      31.58  73.33 ( 59.0- 84.0)
+The 60/40 split is not group-aware: the same (project, cid, uid) pair can
+appear on both sides of it across mutation rounds, so E1 is optimistic and
+is not a held-out result. The primary artifact is the E2b separation table
+below, which is not split-based.
 ```
 
-Say out loud: **`cdc_counterfactual` does not have the lowest FIR.** On E1 the lowest FIR is `lexical` at 5.88% (1.0-27.0). E0 set each free-threshold baseline to its own best F1 on a rare gap class, which lands high thresholds, so those policies rarely predict implemented.
+(The caveat printed inside that block calls the separation table "below", which is where `report.py` prints it; in this script it is above.)
+
+`cdc` and `cdc_counterfactual` hold the two highest recalls (94.12% and 95.59%) and the two lowest false-implemented rates (5.88% and 4.41%), against `lexical` 47.06%, `hybrid` 48.53% and `embedding` 51.47%. Say plainly that **E1 is not a held-out result**: the 60/40 split is not group-aware, so the same `(project, cid, uid)` pair can appear on both sides of it across mutation rounds and E1 is optimistic by an unmeasured amount. The separation table above is the primary artifact and is not split-based.
+
+And the ablation comparison:
+
+```
+=== E4 cdc versus cdc_counterfactual ===
+cdc_counterfactual keeps the corroboration count but drops the
+channel-disjointness requirement.
+------------------------------------------------------------------------------------------------
+policy                    prec % (95% CI)     rec % (95% CI)     F1     FIR % (95% CI)
+cdc                     28.78 ( 25.2- 32.7)  93.49 ( 88.7- 96.3)  44.01   6.51 (  3.7- 11.3)
+cdc_counterfactual      26.66 ( 23.3- 30.3)  95.27 ( 90.9- 97.6)  41.66   4.73 (  2.4-  9.1)
+```
+
+`cdc_counterfactual` buys its slightly lower false-implemented rate by rejecting legitimate code: it accepts 79.59% of pristine `NOMINAL` pairs against `cdc`'s 100.00%. One corpus element causes it — `ledger schema:connect_memory` is called from `db.py` but no test calls it, so ablating `ch:CALL` collapses its count. `cdc_counterfactual` is therefore the stricter policy and the wrong default on a thinly tested codebase; **`cdc` is the better default.**
 
 To regenerate results (slow; not required live):
 
@@ -106,7 +145,37 @@ python experiments/run_all.py --quick
 python experiments/run_all.py
 ```
 
-### 4. Figures
+### 4. The correction we made to our own evaluation
+
+Present this; do not wait to be caught by it. It is the strongest thing on the slide deck after the 0.0.
+
+**What was wrong.** The first evaluation labelled at **claim level**: a claim was marked a gap whenever its single lexical best-match element was mutated. That is wrong whenever a claim is implemented by more than one element — mutate the best-match function and the claim is still implemented by the others, but the label says "gap" and every policy that looks at real evidence is scored as having missed it.
+
+**How it was found.** The published table said `cdc` had a 76.47% false-implemented rate against `lexical`'s 5.88% — the method losing, on its own headline table, to the baseline it was built to beat. Rather than ship that, we measured the labels themselves: **141 of 161** such claims remain genuinely implemented by other elements. The labels were wrong, not the method.
+
+**What changed.** Evaluation is now at **(claim, element) granularity** — one pair per claim that had evidence on that element before the mutation — and the primary comparison is separation rather than a false-implemented rate. **The engine did not change.** `cdc/` was not touched: the same corroboration code produces both tables. Only the labelling and the reporting changed.
+
+**What we kept.** The mis-specified table is still printed by `report.py` and still in the README, captioned as a diagnostic. It was not deleted. Show it if asked:
+
+```
+=== E1 secondary: claim-level labelling (diagnostic only) ===
+thresholds: {"channel_count": 4, "embedding": 0.6, "evidence_count": 4, "hybrid": 0.5, "lexical": 0.4}
+------------------------------------------------------------------------------------------------
+Claim-level labelling marks a claim as a gap when its single lexical best-match
+element was mutated. Measured on this corpus, 141 of 161 such claims remain
+genuinely implemented by other elements, so this table understates every
+evidence-based policy and is retained only as a diagnostic.
+policy                    prec % (95% CI)     rec % (95% CI)     F1     FIR % (95% CI)
+lexical                 20.51 ( 13.0- 30.8)  94.12 ( 73.0- 99.0)  33.68   5.88 (  1.0- 27.0)
+embedding               21.54 ( 13.3- 33.0)  82.35 ( 59.0- 93.8)  34.15  17.65 (  6.2- 41.0)
+hybrid                  21.13 ( 13.2- 32.0)  88.24 ( 65.7- 96.7)  34.09  11.76 (  3.3- 34.3)
+evidence_count          80.00 ( 37.6- 96.4)  23.53 (  9.6- 47.3)  36.36  76.47 ( 52.7- 90.4)
+channel_count           50.00 ( 23.7- 76.3)  29.41 ( 13.3- 53.1)  37.04  70.59 ( 46.9- 86.7)
+cdc                    100.00 ( 51.0-100.0)  23.53 (  9.6- 47.3)  38.10  76.47 ( 52.7- 90.4)
+cdc_counterfactual      40.00 ( 16.8- 68.7)  23.53 (  9.6- 47.3)  29.63  76.47 ( 52.7- 90.4)
+```
+
+### 5. Figures
 
 ```
 python figures/make_figures.py
@@ -115,6 +184,22 @@ python figures/make_figures.py
 Writes `assets/fig1.png` … `assets/fig6.png`. On the panel, open **`assets/fig4.png`** (identifier-ablation curves).
 
 ## Panel Q&A
+
+### Why should we trust the corrected numbers if the first ones were wrong?
+
+Three reasons, and none of them is "trust us". First, **the engine never changed**: `cdc/` was not touched between the two evaluations, so the same corroboration code produced both tables. What was wrong was the labelling — claim-level best-match labelling, which marks a claim as a gap even when other elements still implement it — and we measured exactly how wrong: 141 of 161 such claims remain genuinely implemented. Second, the headline result is **threshold-invariant**, which is the property a tuned number would not have: `lexical`, `embedding` and `hybrid` separate `NOMINAL` by 0.0 at every point of the sweep grid (seven thresholds, 0.1 to 0.7, crossed with every swept `k_min`), and it cannot be otherwise, because `NOMINAL` leaves name, docstring and path byte-for-byte unchanged and those are the only inputs those policies read. Third, it is **reproducible**: the harness is seeded and offline, repeated `python experiments/run_all.py` runs write a byte-identical `results/results.json`, and every number in the README, the slides and this script is copied from `python experiments/report.py` rather than retyped. The old table is still printed, captioned as a diagnostic, so both are on the record.
+
+### Where is the method weakest?
+
+`WEAKEN`. `cdc` separates it by 0.0 pp (n = 19) and `cdc_counterfactual` beats `cdc` there at 15.8 pp — a baseline-style ablation policy outperforming plain corroboration on one operator. The cause is known: `cdc/mutate.py` weakens an algorithm by mapping `sha256` to `md5`, and `cdc/codebase.py` maps `md5` to `op:hash_weak` rather than dropping the operation, so `BODY` still fires after the algorithm has been weakened. It is a limit of the operation vocabulary, not a bug, and it is disclosed in the README, on the Conclusion slide and in the report.
+
+### If the counterfactual is stricter, why is it not the default?
+
+Because strictness is not free. `cdc_counterfactual` accepts only 79.59% of pristine `NOMINAL` pairs against `cdc`'s 100.00% — it rejects legitimately implemented code. One corpus element shows the mechanism: `ledger schema:connect_memory` is called from `db.py` but no test calls it, so ablating `ch:CALL` leaves only same-file channels, which all conflict, and the count collapses. On a thinly tested codebase that behaviour is common, so `cdc` is the better default; `cdc_counterfactual` is the right choice only where a false *implemented* verdict costs more than a false gap.
+
+### Is the E1 table a held-out result?
+
+No, and we do not present it as one. The 60/40 split is not group-aware: the same `(project, cid, uid)` pair can appear on both sides of it across mutation rounds, so E1 is optimistic by an unmeasured amount. `report.py` prints that caveat with the table. The primary artifact is the separation table, which is not split-based. A group-aware split on `(project, cid, uid)` is the fix and is not implemented here. Related: the `DELETE` operator is degenerate — it removes the element from the tree, so its gutted column is 0.0 for all seven policies by construction and its pairs are free true positives. `report.py` also prints E1 with those 13 pairs removed as a sensitivity check, and the ordering holds (`cdc` recall 92.73%, FIR 7.27%; `lexical` recall 41.82%, FIR 58.18%).
 
 ### Why not just use an LLM?
 
