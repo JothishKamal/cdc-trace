@@ -146,12 +146,31 @@ is not a held-out result. The primary artifact is the E2b separation table
 below, which is not split-based.
 ```
 
-`cdc` and `cdc_counterfactual` hold the two highest recalls and the two lowest false-implemented rates, which is the ordering the method predicts and the opposite of what our first evaluation reported. (The caveat printed with that table says the separation table is "below" it, which is where `report.py` prints it; on this slide it is above.) E1 is **not** a held-out result: the 60/40 split is not group-aware, so E1 is optimistic by an unmeasured amount. The primary artifact is the separation table above, which is not split-based. Identifier-ablation curves: `assets/fig4.png`.
+`cdc` and `cdc_counterfactual` hold the two highest recalls and the two lowest false-implemented rates, which is the ordering the method predicts and the opposite of what our first evaluation reported. (The caveat printed with that table says the separation table is "below" it, which is where `report.py` prints it; on this slide it is above.) E1 is **not** a held-out result: the 60/40 split is not group-aware, so E1 is optimistic by an unmeasured amount. The primary artifact is the separation table above, which is not split-based.
+
+**E3 identifier ablation (`assets/fig4.png`).** Renaming a growing fraction of function
+and class names to opaque tokens, then re-running the same `NOMINAL` separation:
+
+| policy | 0.00 | 0.25 | 0.50 | 0.75 | 1.00 |
+|---|---:|---:|---:|---:|---:|
+| `lexical` / `embedding` / `hybrid` | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| `evidence_count` / `channel_count` | 80.6 | 55.0 | 35.1 | 25.5 | 7.7 |
+| `cdc` | 95.5 | 66.0 | 54.6 | 33.0 | 15.4 |
+| `cdc_counterfactual` | 89.6 | 47.0 | 30.9 | 0.0 | 0.0 |
+
+Separation in pp; n = 67, 100, 97, 94, 65 mutated pairs. This one does **not** flatter the
+method: `cdc` separation falls monotonically as identifiers are destroyed, because `NAME`
+is one of the seven channels and wholesale renaming genuinely removes evidence the method
+uses. What it does not do is make corroboration wrong — `cdc`'s accepts-gutted column is
+0.00% at every ablation level, so the method goes silent rather than accepting a gutted
+body, and at full ablation it still separates by 15.4 pp where every lexical baseline
+separates by 0.0.
 
 **Disclosed costs.**
 
 - The original claim-level evaluation was mis-specified: it marked a claim as a gap whenever its single lexical best-match element was mutated, but 141 of 161 such claims are still implemented by other elements. It understated every evidence-based policy. Corrected here; the old table is retained in the README as a captioned diagnostic.
 - `WEAKEN` is the weak operator for the method: `cdc` separates it by 0.0 pp (n = 19) and `cdc_counterfactual` beats `cdc` there at 15.8 pp. `mutate.py` maps `sha256` to `md5` and `codebase.py` maps `md5` to `op:hash_weak` instead of dropping the operation, so `BODY` still fires after the algorithm is weakened — a limit of the operation vocabulary, not a bug.
+- Corroboration degrades under wholesale identifier renaming: `cdc` separation on `NOMINAL` falls from 95.5 pp to 15.4 pp between 0.00 and 1.00 ablation (E3 above). `NAME` is one of the seven channels, so removing every identifier removes evidence the method uses. The loss is entirely in accepts-pristine; accepts-gutted stays at 0.00%.
 - The counterfactual costs acceptance of legitimate code: `cdc_counterfactual` accepts 79.59% of pristine `NOMINAL` pairs against `cdc`'s 100.00%, because `ledger schema:connect_memory` is called but has no test calling it, so ablating `ch:CALL` collapses it. `cdc_counterfactual` is the stricter policy and the wrong default on thinly tested codebases; `cdc` is the better default.
 
 ## Conclusion
@@ -164,6 +183,7 @@ below, which is not split-based.
 
 - `WEAKEN` is the method's weak operator: `cdc` separates it by 0.0 pp (n = 19), and `cdc_counterfactual` beats `cdc` there at 15.8 pp. Cause: `sha256` maps to `md5`, which the operation vocabulary keeps as `op:hash_weak` rather than dropping, so `BODY` still fires.
 - `cdc_counterfactual` costs acceptance of legitimate code: 79.59% of pristine `NOMINAL` pairs against `cdc`'s 100.00%, driven by one called-but-untested element. It is the stricter policy and the wrong default on thinly tested codebases; `cdc` is the better default.
+- Identifier ablation costs the method real ground: `cdc` separation on `NOMINAL` falls from 95.5 pp at 0.00 ablation to 15.4 pp at 1.00. It goes silent rather than wrong — accepts-gutted stays at 0.00% throughout — but a fully obfuscated codebase is one this method has much less to say about.
 - E1 is not held out: the 60/40 split is not group-aware, so it is optimistic by an unmeasured amount. The separation table is the primary artifact and is not split-based.
 - `DELETE` is degenerate: its gutted column is 0.0 for all seven policies by construction and its pairs are free true positives.
 - `CALL` and `TEST` emit only when the callee is not a stub and another channel already fired, so `NOMINAL` can demote a claim; this is current `gather` behaviour, not the original spec table.

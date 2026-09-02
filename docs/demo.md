@@ -181,13 +181,66 @@ cdc_counterfactual      40.00 ( 16.8- 68.7)  23.53 (  9.6- 47.3)  29.63  76.47 (
 python figures/make_figures.py
 ```
 
-Writes `assets/fig1.png` … `assets/fig6.png`. On the panel, open **`assets/fig4.png`** (identifier-ablation curves).
+Writes `assets/fig1.png` … `assets/fig6.png`. On the panel, open **`assets/fig3.png`** (the
+primary separation bars) first, then **`assets/fig4.png`** (identifier ablation).
+
+Present `fig4` with its caveat, and present the caveat before the curve, not after. It
+plots the same separation measure as `fig3` against the fraction of function and class
+names renamed to opaque tokens:
+
+```
+Separation in percentage points against ablation fraction:
+policy                      0.0     0.25      0.5     0.75      1.0
+lexical                     0.0      0.0      0.0      0.0      0.0
+embedding                   0.0      0.0      0.0      0.0      0.0
+hybrid                      0.0      0.0      0.0      0.0      0.0
+evidence_count             80.6     55.0     35.1     25.5      7.7
+channel_count              80.6     55.0     35.1     25.5      7.7
+cdc                        95.5     66.0     54.6     33.0     15.4
+cdc_counterfactual         89.6     47.0     30.9      0.0      0.0
+```
+
+Say out loud: **this one does not flatter us.** `cdc` separation falls from 95.5 pp to
+15.4 pp as identifiers are destroyed. `NAME` is one of the seven evidence channels, so
+renaming every identifier removes evidence the method genuinely uses, and the curve shows
+exactly that. Then say what it does *not* show: `cdc`'s accepts-gutted column is 0.00% at
+every ablation level, so the method never starts accepting a gutted body — it stops
+recognising working code and goes quiet. Lost recall, not a false `SUPPORTED`. And the
+baselines gain nothing from the comparison: `lexical`, `embedding` and `hybrid` sit at
+0.0 pp at *every* level including 0.00, because `NOMINAL` never changes what they read.
+At full ablation `cdc` still separates by 15.4 pp where all three of them separate by
+nothing.
+
+If asked why `cdc_counterfactual` hits 0.0 at 0.75 and 1.00: it accepts nothing at all
+there (0.00% pristine, 0.00% gutted). It is the stricter policy, and on obfuscated code
+it refuses everything, which is why `cdc` is the default.
+
+An earlier version of this figure showed `lexical`, `hybrid` and `embedding` flat at
+F1 = 1.000 while `cdc` fell away — the inverse of the claim. Two defects caused it, both
+fixed: the metric hard-coded `fp = 0` and `precision = 1.0`, so it could not penalise a
+policy that accepts everything; and the rename emitted `_r{i}_{old}`, which still
+sub-tokenises to the original identifier, so nothing was actually being ablated. If the
+panel saw the old figure, say this before they ask.
 
 ## Panel Q&A
 
 ### Why should we trust the corrected numbers if the first ones were wrong?
 
 Three reasons, and none of them is "trust us". First, **the engine never changed**: `cdc/` was not touched between the two evaluations, so the same corroboration code produced both tables. What was wrong was the labelling — claim-level best-match labelling, which marks a claim as a gap even when other elements still implement it — and we measured exactly how wrong: 141 of 161 such claims remain genuinely implemented. Second, the headline result is not a tuned number, and it is not defended by a sweep either — it holds **by construction**: `lexical`, `embedding` and `hybrid` read only `el.name`, `el.doc` and `el.path` (they take a `k_min` argument and never read it), and `NOMINAL` leaves all three byte-for-byte unchanged, so each computes the same score before and after the mutation and its separation is exactly 0.0 at every threshold and every `k_min`. That is a stronger statement than "we searched a grid and never saw it move". Third, it is **reproducible**: the harness is seeded and offline, repeated `python experiments/run_all.py` runs write a byte-identical `results/results.json`, and every number in the README, the slides and this script is copied from `python experiments/report.py` rather than retyped. The old table is still printed, captioned as a diagnostic, so both are on the record.
+
+### Does the method depend on identifiers after all?
+
+Partly, and E3 measures how much. Rename every function and class to an opaque token and
+`cdc` separation on `NOMINAL` falls from 95.5 pp to 15.4 pp. `NAME` is one of the seven
+evidence channels, so that is a real cost, not an artefact — wholesale renaming removes
+evidence the method uses. Two things bound it. First, the method degrades by going
+silent, not by becoming wrong: `cdc` accepts 0.00% of gutted elements at every ablation
+level, so obfuscation costs recall, never a false `SUPPORTED`. Second, it degrades from a
+position the baselines never occupy: `lexical`, `embedding` and `hybrid` separate 0.0 pp
+at *every* ablation level including zero, so at full ablation a 15.4 pp separation is
+still the only separation on the table. The honest summary is that corroboration needs
+more than a name but is weakened when names are destroyed, and file paths and docstrings
+carry the residue.
 
 ### Where is the method weakest?
 

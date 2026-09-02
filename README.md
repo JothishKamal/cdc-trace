@@ -130,6 +130,50 @@ counted over the 431-pair test split); the two are not the same quantity.
 `cdc` separates it by 0.0 pp (n = 19) while `cdc_counterfactual` reaches 15.8 pp. The
 cause is the operation vocabulary, not a defect in the harness — see limitations below.
 
+### E3 — identifier ablation, and what it costs the method
+
+E3 renames a growing fraction of defined function and class names to opaque tokens, then
+runs the same mutation and the same separation measure on the renamed tree. File paths
+and docstrings are left alone, so `NAME` can still fire on the path and `DOC` is
+untouched. Separation on `NOMINAL`, in percentage points:
+
+| policy | 0.00 | 0.25 | 0.50 | 0.75 | 1.00 |
+|---|---:|---:|---:|---:|---:|
+| `lexical` | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| `embedding` | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| `hybrid` | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| `evidence_count` | 80.6 | 55.0 | 35.1 | 25.5 | 7.7 |
+| `channel_count` | 80.6 | 55.0 | 35.1 | 25.5 | 7.7 |
+| `cdc` | 95.5 | 66.0 | 54.6 | 33.0 | 15.4 |
+| `cdc_counterfactual` | 89.6 | 47.0 | 30.9 | 0.0 | 0.0 |
+
+n = 67, 100, 97, 94, 65 mutated `NOMINAL` pairs. Wilson intervals and the full
+per-operator blocks are printed by `python experiments/report.py`; the curve is
+`assets/fig4.png`.
+
+**What this shows.** `cdc` separation falls monotonically from 95.5 pp to 15.4 pp as
+identifiers are destroyed. That is a real cost, and we state it as one: `NAME` is one of
+the seven evidence channels, so ablating every identifier removes evidence the method
+genuinely uses. Anyone reading the introduction's "rename the function to `f7` and every
+one of them collapses" should also read this table, which says corroboration degrades
+under the same treatment.
+
+**What it does not show.** It does not show corroboration becoming *wrong*. The
+accepts-gutted column for `cdc` is 0.00% at every ablation level: the method never
+accepts a gutted body, renamed or not. What collapses is accepts-pristine — it stops
+recognising working code and goes silent. The failure mode is lost recall, not a false
+`SUPPORTED`. And the baselines do not benefit from the comparison: `lexical`, `embedding`
+and `hybrid` sit at exactly 0.0 pp at *every* ablation level, including 0.00, because
+`NOMINAL` never changes what they read. At full ablation `cdc` still separates by 15.4 pp
+(gutted CI 0.0–5.6 against pristine CI 8.6–26.1) where every lexical baseline separates
+by nothing.
+
+**Prior figure.** An earlier `fig4` showed `lexical`, `hybrid` and `embedding` flat at
+F1 = 1.000 across this sweep while `cdc` fell away. That was an artefact of two defects,
+both now fixed: the metric hard-coded `fp = 0` and `precision = 1.0`, so it could not
+penalise a policy that accepts everything; and the rename emitted `_r{i}_{old}`, which
+still sub-tokenises to the original identifier, so nothing was actually ablated.
+
 ### E1 pair-level comparison
 
 ```
@@ -239,6 +283,13 @@ has been corrected, and the (claim, element) tables above supersede it.
   `(project, cid, uid)` pair can appear on both sides of it across mutation rounds — so
   E1 is optimistic by an unmeasured amount. The primary artifact is the E2b separation
   table, which is not split-based.
+- Corroboration degrades under wholesale identifier renaming, and we report it rather
+  than bury it. `cdc` separation on `NOMINAL` falls from 95.5 pp to 15.4 pp as the
+  ablated fraction goes from 0.00 to 1.00 (E3 above). `NAME` is one of the seven
+  channels, so removing every identifier removes evidence the method uses. The
+  degradation is entirely in accepts-pristine — the accepts-gutted column stays at 0.00%
+  throughout — so the method goes silent rather than wrong, but a fully obfuscated
+  codebase is a codebase this method has much less to say about.
 - `DELETE` is degenerate. Its gutted column is 0.0 for all seven policies by construction
   and its pairs are free true positives, so it discriminates nothing between policies.
 - Ground truth is mutation-injected. The mutation operators encode our own assumptions
