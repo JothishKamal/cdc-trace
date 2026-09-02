@@ -248,17 +248,22 @@ def fig3_separation(res, path, operator="NOMINAL"):
 
 
 def fig4_ablation(res, path):
+    """Pristine-versus-gutted separation against identifier-ablation fraction."""
     e3 = res.get("e3_identifier_ablation", {})
-    fig, ax = plt.subplots(figsize=(9.5, 5.6), layout="constrained")
+    fig, ax = plt.subplots(figsize=(9.5, 6.4), layout="constrained")
     ax.set_xlabel("Identifier-ablation fraction")
-    ax.set_ylabel("F1")
-    ax.set_title("E3 identifier ablation")
-    ax.set_ylim(0.0, 1.05)
+    ax.set_ylabel("Separation (percentage points)")
     ax.set_xlim(-0.05, 1.05)
+    ax.set_ylim(-4.0, 104.0)
 
     if not isinstance(e3, dict):
         save(fig, path)
         return
+
+    operator = e3.get("headline_operator", "NOMINAL")
+    ax.set_title(
+        f"E3 identifier ablation: separation on {operator}"
+    )
 
     frac_keys = []
     for key in e3:
@@ -270,23 +275,26 @@ def fig4_ablation(res, path):
 
     policy_names = set()
     for _, key in frac_keys:
-        block = e3.get(key) or {}
+        block = (e3.get(key) or {}).get(operator) or {}
         if isinstance(block, dict):
             policy_names.update(k for k, v in block.items() if isinstance(v, dict))
     policies = ordered_policies(policy_names)
 
+    ns = []
     for policy in policies:
         xs, ys = [], []
         for frac, key in frac_keys:
-            block = e3.get(key) or {}
+            block = (e3.get(key) or {}).get(operator) or {}
             rec = block.get(policy) if isinstance(block, dict) else None
-            if isinstance(rec, dict) and "f1" in rec:
+            if isinstance(rec, dict) and "separation" in rec:
                 xs.append(frac)
-                ys.append(float(rec["f1"]))
+                ys.append(float(rec["separation"]))
+                if rec.get("n"):
+                    ns.append((frac, int(rec["n"])))
         if xs:
-            # Several policies sit at F1 = 1.0 for the whole sweep. Distinct
-            # dash patterns and markers keep a hidden line visible under the
-            # one drawn on top of it.
+            # lexical, embedding and hybrid all sit flat on 0.0 for the whole
+            # sweep. Distinct dash patterns and markers keep a hidden line
+            # visible under the one drawn on top of it.
             i = policies.index(policy)
             ax.plot(
                 xs, ys,
@@ -297,7 +305,25 @@ def fig4_ablation(res, path):
             )
 
     if policies:
-        ax.legend(loc="lower left", fontsize=8)
+        ax.legend(loc="upper right", fontsize=8)
+
+    counts = ", ".join(f"{f:g}: n={n}" for f, n in sorted(dict(ns).items()))
+    ax.text(
+        0.0, -0.13,
+        "Separation is accepts-pristine minus accepts-gutted, in percentage"
+        " points, on the\n"
+        f"{operator} operator -- the same measure as fig3. Mutated pairs per"
+        f" fraction: {counts}.\n"
+        "lexical, embedding and hybrid lie flat on 0.0 at every fraction:"
+        " NOMINAL leaves name,\n"
+        "docstring and path unchanged and those are the only fields they read,"
+        " so they cannot\n"
+        "separate at any ablation level. cdc separation falls as identifiers"
+        " are destroyed --\n"
+        "NAME is one of the seven evidence channels, so this is a real cost of"
+        " the method.",
+        transform=ax.transAxes, fontsize=8, va="top",
+    )
     save(fig, path)
 
 
