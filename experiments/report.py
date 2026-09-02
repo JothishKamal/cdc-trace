@@ -34,6 +34,19 @@ DELETE_CAPTION = (
 )
 
 
+E3_CAPTION = (
+    "Identifier ablation renames the given fraction of defined function and\n"
+    "class names to opaque tokens; file paths and docstrings are untouched, so\n"
+    "the NAME channel can still fire on the path and DOC is unaffected. Scored\n"
+    "with the same pristine-versus-gutted separation as E2b, on NOMINAL, so a\n"
+    "policy that accepts everything separates 0.0 and is penalised for it.\n"
+    "NAME is one of the seven evidence channels, so ablating identifiers\n"
+    "removes evidence the method genuinely uses: the fall in cdc separation\n"
+    "across this sweep is a real cost of the method, not an artefact. Full\n"
+    "per-operator blocks are in results/results.json."
+)
+
+
 def wilson(k, n, z=1.96):
     if n == 0:
         return (0.0, 0.0)
@@ -153,6 +166,50 @@ def print_e2(res):
         gap_table(block)
 
 
+def print_e3(res):
+    e3 = res.get("e3_identifier_ablation")
+    if not e3:
+        return
+    op = e3.get("headline_operator", "NOMINAL")
+    heading(f"E3 identifier ablation ({op}, separation)")
+    print(E3_CAPTION)
+    fractions = sorted(
+        (k for k in e3 if k not in ("mode", "headline_operator", "note")),
+        key=float,
+    )
+    for frac in fractions:
+        block = (e3[frac] or {}).get(op) or {}
+        if not block:
+            continue
+        any_row = block[next(iter(block))]
+        print()
+        print(f"[ablation fraction {frac}]  n = {any_row['n']} mutated pairs")
+        rule()
+        print(f"{'policy':<22} {'accepts pristine % (95% CI)':>28}"
+              f" {'accepts gutted % (95% CI)':>28} {'sep. pp':>8}")
+        for policy in ordered_policies(block):
+            row = block[policy]
+            n = row["n"]
+            p = pct_ci(row["accepts_pristine"] / 100.0,
+                       row["n_accepts_pristine"], n)
+            g = pct_ci(row["accepts_gutted"] / 100.0,
+                       row["n_accepts_gutted"], n)
+            print(f"{policy:<22} {p:>28} {g:>28} {row['separation']:8.1f}")
+    print()
+    print("Separation in percentage points against ablation fraction:")
+    header = "".join(f"{f:>9}" for f in fractions)
+    print(f"{'policy':<22}{header}")
+    names = set()
+    for frac in fractions:
+        names.update((e3[frac] or {}).get(op, {}).keys())
+    for policy in ordered_policies(names):
+        cells = ""
+        for frac in fractions:
+            row = ((e3[frac] or {}).get(op) or {}).get(policy)
+            cells += f"{row['separation']:9.1f}" if row else f"{'--':>9}"
+        print(f"{policy:<22}{cells}")
+
+
 def print_e4(res):
     heading("E4 cdc versus cdc_counterfactual")
     print("cdc_counterfactual keeps the corroboration count but drops the")
@@ -189,6 +246,7 @@ def main():
     print_e1(res)
     print_e2b(res)
     print_e2(res)
+    print_e3(res)
     print_e4(res)
     print_e5(res)
     print_e1_secondary(res)
