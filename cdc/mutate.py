@@ -93,6 +93,19 @@ def apply_mutations(
 
 
 def rename_identifiers(source: str, fraction: float, rng) -> str:
+    """
+    Replace a fraction of the defined function and class names with opaque ones.
+
+    The replacement is a bare ``f{i}``, not a decoration of the original. A
+    decorated name such as ``_r0_digest_token`` still sub-tokenises to
+    ``digest`` and ``token``, so the original identifier survives intact and no
+    lexical signal is removed -- the ablation would measure nothing. The
+    replacement must therefore share no sub-token with the name it replaces.
+
+    Only identifiers are ablated: file paths and docstrings are untouched, so
+    the NAME channel can still fire on the path and the DOC channel is
+    unaffected.
+    """
     if fraction == 0:
         ast.parse(source)
         return source
@@ -109,7 +122,7 @@ def rename_identifiers(source: str, fraction: float, rng) -> str:
     shuffled = list(defined)
     rng.shuffle(shuffled)
     selected = shuffled[: math.ceil(fraction * len(defined))]
-    mapping = {old: f"_r{i}_{old}" for i, old in enumerate(selected)}
+    mapping = _opaque_mapping(selected, _identifiers(tree))
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             if node.name in mapping:
@@ -120,6 +133,36 @@ def rename_identifiers(source: str, fraction: float, rng) -> str:
             node.attr = mapping[node.attr]
     ast.fix_missing_locations(tree)
     return ast.unparse(tree)
+
+
+def _identifiers(tree: ast.AST) -> Set[str]:
+    """Every name already bound or referenced in the module."""
+    out: Set[str] = set(_BUILTIN_NAMES)
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            out.add(node.name)
+        elif isinstance(node, ast.Name):
+            out.add(node.id)
+        elif isinstance(node, ast.Attribute):
+            out.add(node.attr)
+        elif isinstance(node, ast.arg):
+            out.add(node.arg)
+        elif isinstance(node, ast.alias):
+            out.add(_bound_name(node))
+    return out
+
+
+def _opaque_mapping(selected: Sequence[str], taken: Set[str]) -> dict:
+    """Map each selected name to a fresh ``f{i}`` that collides with nothing."""
+    mapping: dict = {}
+    i = 0
+    for old in selected:
+        while f"f{i}" in taken:
+            i += 1
+        mapping[old] = f"f{i}"
+        taken.add(f"f{i}")
+        i += 1
+    return mapping
 
 
 def _apply_operator(

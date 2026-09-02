@@ -1,13 +1,20 @@
 """Unit tests for the labelled mutation operators."""
 import ast
 import os
+import random
 import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from cdc.model import Claim, CodeElement
-from cdc.mutate import OPERATORS, apply_mutations, mutate_source
+from cdc.model import sub_tokens
+from cdc.mutate import (
+    OPERATORS,
+    apply_mutations,
+    mutate_source,
+    rename_identifiers,
+)
 
 SRC = '''
 import hashlib
@@ -33,6 +40,42 @@ def test_rename_keeps_behaviour_and_drops_the_name():
     out = mutate_source(SRC, "digest_token", "RENAME")
     assert "digest_token" not in names(out)
     assert "sha256" in out               # behaviour intact
+
+
+
+def test_rename_identifiers_destroys_the_original_tokens():
+    """
+    Identifier ablation must ablate.
+
+    A decorated name such as ``_r0_digest_token`` still sub-tokenises to
+    ``digest``/``token``, so it would leave every lexical matcher untouched and
+    measure nothing. The replacement has to share no sub-token with the name it
+    replaces.
+    """
+    out = rename_identifiers(SRC, 1.0, random.Random(0))
+    renamed = names(out)
+    assert "digest_token" not in renamed
+    assert renamed and all(
+        not (set(sub_tokens(new)) & set(sub_tokens("digest_token")))
+        for new in renamed
+    )
+    assert "hashlib.sha256" in out          # behaviour intact
+    ast.parse(out)
+
+
+def test_rename_identifiers_is_a_no_op_at_fraction_zero():
+    assert rename_identifiers(SRC, 0.0, random.Random(0)) == SRC
+
+
+def test_rename_identifiers_renames_call_sites_too():
+    src = SRC + """
+
+def caller(v):
+    return digest_token(v)
+"""
+    out = rename_identifiers(src, 1.0, random.Random(0))
+    assert "digest_token" not in out
+    ast.parse(out)
 
 
 def test_weaken_substitutes_a_weaker_algorithm():
