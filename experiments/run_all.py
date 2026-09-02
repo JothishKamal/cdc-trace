@@ -42,6 +42,25 @@ CLAIM_LEVEL_CAVEAT = (
 )
 
 
+# E3 resolves five ablation levels one operator at a time, so it needs more
+# mutation rounds per level than the pooled tables do to keep n usable.
+E3_ROUNDS = 3
+E3_OPERATOR = "NOMINAL"
+
+E3_NOTE = (
+    "Identifier ablation renames the given fraction of defined function and"
+    " class\n"
+    "names to opaque tokens. File paths and docstrings are left alone, so the"
+    " NAME\n"
+    "channel can still fire on the path and DOC is untouched. NAME is one of"
+    " the\n"
+    "seven evidence channels, so ablating it removes evidence the method"
+    " genuinely\n"
+    "uses; a fall in cdc separation across the sweep is a real cost, not an"
+    " artefact."
+)
+
+
 def r6(x):
     return round(float(x), 6)
 
@@ -282,26 +301,6 @@ def rename_tree(src, dst, fraction, rng):
             fh.write(rewritten)
 
 
-def implemented_class_metrics(preds):
-    n = len(preds)
-    tp = sum(1 for p in preds if p)
-    fn = n - tp
-    fp = 0
-    prec = 1.0 if tp else 0.0
-    rec = tp / n if n else 0.0
-    f1 = (2 * prec * rec / (prec + rec)) if (prec + rec) else 0.0
-    return {
-        "f1": r6(f1),
-        "precision": r6(prec),
-        "recall": r6(rec),
-        "implemented_rate": r6(rec),
-        "n": n,
-        "tp": tp,
-        "fn": fn,
-        "fp": fp,
-    }
-
-
 def e0_sweep(train, embedder):
     sweep = {}
     chosen = {}
@@ -344,28 +343,46 @@ def e0_sweep(train, embedder):
     return sweep, chosen
 
 
-def e3_ablation(pristine, thresholds, embedder):
-    out = {"mode": "implemented_class_f1"}
+def e3_ablation(pristine, thresholds, embedder, n_rounds=3):
+    """
+    Separation as a function of how much of the identifier signal is destroyed.
+
+    The previous framing scored the implemented class alone. Every claim in a
+    pristine tree is implemented, so that class has no negative examples, no
+    false positive is definable, and no honest precision can be computed from
+    it -- a policy that accepts everything scores perfectly by construction.
+    E3 therefore uses the same accepts-pristine / accepts-gutted separation as
+    E2b: at each ablation fraction the renamed tree is mutated in the usual
+    way, and a policy is scored on the gap between the rate at which it
+    accepts the working element and the rate at which it accepts the same
+    element gutted. Accepting everything now separates 0.0 and is penalised.
+
+    All five operators are recorded; NOMINAL is the headline, as in E2b.
+    """
+    out = {
+        "mode": "pristine_versus_gutted_separation",
+        "headline_operator": E3_OPERATOR,
+        "note": E3_NOTE,
+    }
     for fi, fraction in enumerate(FRACTIONS):
-        per_policy = {name: [] for name in POLICIES}
+        items = []
         for pi, (name, (code_dir, claims, _elements)) in enumerate(pristine):
-            rng = random.Random(SEED + 90001 + 100 * fi + (pi + 1))
-            with tempfile.TemporaryDirectory() as tmp:
-                dst = os.path.join(tmp, "code")
-                rename_tree(code_dir, dst, fraction, rng)
-                els = extract_codebase(dst)
-                for claim in claims:
-                    ev = gather(claim, els)
-                    item = {"claim": claim, "elements": els, "evidence": ev}
-                    for pname in POLICIES:
-                        per_policy[pname].append(
-                            apply_policy(pname, item, thresholds, embedder)
-                        )
-        frac_key = str(fraction)
-        block = {}
-        for pname, preds in per_policy.items():
-            block[pname] = implemented_class_metrics(preds)
-        out[frac_key] = block
+            for ri in range(n_rounds):
+                seed_base = SEED + 90001 + 1000 * fi + 10 * (pi + 1) + ri
+                rng = random.Random(seed_base)
+                with tempfile.TemporaryDirectory() as tmp:
+                    dst = os.path.join(tmp, "code")
+                    rename_tree(code_dir, dst, fraction, rng)
+                    els = extract_codebase(dst)
+                    mut_rng = random.Random(seed_base + 500000)
+                    pairs, _claim_level = build_items(
+                        dst, claims, els, mut_rng, RATE, name, ri
+                    )
+                    items.extend(pairs)
+        items.sort(
+            key=lambda it: (it["project"], it["round"], it["cid"], it["uid"])
+        )
+        out[str(fraction)] = e2b_separation(items, thresholds, embedder)
     return out
 
 
@@ -522,7 +539,9 @@ def run(quick=False):
         "e1_claim_level_secondary": e1_secondary,
         "e2_by_operator": e2,
         "e2b_separation": e2b_separation(items, chosen, embedder),
-        "e3_identifier_ablation": e3_ablation(pristine, chosen, embedder),
+        "e3_identifier_ablation": e3_ablation(
+            pristine, chosen, embedder, n_rounds=E3_ROUNDS * n_rounds
+        ),
         "e4_counterfactual": e4,
         "e5_calibration": e5_calibration(items),
         "e6_scaling": e6_scaling(pristine),
