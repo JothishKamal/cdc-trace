@@ -97,11 +97,14 @@ precisely the rate they accept a working one, so they carry no information about
 the body exists. `cdc` separates it by **100.0**: it accepts every pristine pair and none
 of the gutted ones.
 
-That 0.0 is threshold-invariant. Separation for those three policies is 0.0 at every
-point of the sweep grid (seven thresholds, 0.1 to 0.7, crossed with every swept `k_min`),
-so it is not an artefact of the threshold E0 happened to select. It cannot be otherwise:
-name, docstring and path are the only inputs those three policies read, and `NOMINAL`
-leaves all three unchanged.
+That 0.0 is not an artefact of the threshold E0 happened to select, and the reason is
+stronger than any sweep: it is **guaranteed by construction**, so no grid search was run
+and none is needed. `lexical`, `embedding` and `hybrid` read only `el.name`, `el.doc` and
+`el.path` (`cdc/policies.py`); they accept a `k_min` argument and never read it. The
+`NOMINAL` operator rewrites the body and nothing else, leaving those three fields
+byte-for-byte identical. The score each of those policies computes is therefore literally
+the same number before and after the mutation, so their two columns are equal and their
+separation is exactly 0.0 — at every threshold, and at every `k_min`.
 
 Separation in percentage points, all five operators:
 
