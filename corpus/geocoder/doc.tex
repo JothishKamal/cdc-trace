@@ -1,0 +1,21 @@
+\section{Coordinate cache}
+
+Repeated lookups for the same place should not rebuild a URL. cache_geocode caches the geocode result under a stripped query. lookup_geocode returns the cached result or None. cache_geocode stores the geocode result with float lat and lon. clear_geocode_cache handles cache reset by deleting every key.
+
+The lookup table is a process-local dict with a fixed ceiling so a long run cannot grow without bound.
+
+\section{Http client shape}
+
+Talking to an upstream geocoder is modelled as URL construction plus a requests.Request, never as a live GET. build_geocode_url uses the http client shape to assemble a host and query string. build_geocode_url returns an http url. build_geocode_request uses the http Request helper without sending it. geocode_fixture handles http lookup by returning a canned mapping keyed by city name.
+
+No socket is opened. Tests assert on URL shape and fixture coordinates only.
+
+\section{Json payloads}
+
+Cached hits are written as json when a caller wants a portable snapshot. dump_geocode uses json serialisation. load_geocode uses json. dump_geocode returns json text. load_geocode parses json payloads into query, lat, and lon fields.
+
+Unknown keys on the object are ignored so older snapshots remain readable.
+
+\section{Query helpers}
+
+lookup_geocode queries the cache after stripping the incoming string. A miss is None rather than a fabricated coordinate pair, so callers can tell an empty lookup from a fixture hit.

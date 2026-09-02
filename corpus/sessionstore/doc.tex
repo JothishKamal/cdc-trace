@@ -1,0 +1,19 @@
+\section{Token encryption}
+
+Session tokens sit behind a small authenticated-encryption boundary before they ever reach storage. seal_blob returns ciphertext. AES GCM encrypts the session token so confidentiality and integrity travel together. aes_gcm_encrypt_token uses cryptography to construct an AESGCM cipher and returns a nonce concatenated with the ciphertext. aes_gcm_decrypt_token returns the plaintext token when the supplied key and blob are valid. aes_gcm_encrypt_token implements aes encryption rather than a homemade stream xor.
+
+The nonce is generated per call so two encryptions of the same token do not collide. Callers keep the key outside the database and treat the blob as opaque.
+
+\section{Token hashing}
+
+Lookup must not keep recoverable tokens next to session metadata. hash_session_token hashes the token with sha256 so only a digest is durable. hash_session_token uses hashlib for that digest. The hex string is lowercase and fixed length, which makes equality checks straightforward.
+
+\section{Key rotation}
+
+Long-lived encryption keys are a liability once a process has been running. rotate_session_key generates a random key when a rotation is due. rotate_session_key rotates the session key without deriving it from previous material. rotate_session_key uses random bytes from the secrets module.
+
+Rotation is a distinct step from encryption: a caller obtains a new key, then later tokens go under that key.
+
+\section{Session persistence}
+
+Session rows live in an in-memory sqlite database for the demo. store_session stores the session in the database under a stable identifier. query_session queries the sessions table and returns a mapping or None. store_session uses sqlite3 for the insert. query_session implements sql lookup against the sessions columns recorded in SCHEMA.
