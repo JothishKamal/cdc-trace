@@ -50,6 +50,8 @@ Ground truth is mutation-injected on a vendored Python corpus.
 ```
 python tests/test_corroborate.py
 python experiments/run_all.py
+python experiments/revision.py
+python experiments/revision2.py
 python experiments/report.py
 python figures/make_figures.py
 ```
@@ -58,6 +60,27 @@ Every file under `tests/` is runnable the same way (`python tests/test_….py`).
 `run_all.py` writes `results/results.json`. `report.py` prints the tables
 below. `make_figures.py` writes `assets/fig1.png` … `assets/fig6.png`.
 `python experiments/run_all.py --quick` is a one-round smoke run.
+
+The journal revision adds two scripts. `revision.py` (R1–R9: ablations,
+body-aware baselines, leave-one-project-out, semantic faults, sensitivity,
+whole-project support, targeted WEAKEN) writes `results/revision.json`.
+`revision2.py` (R10–R16: NAME and DOC removed separately, hidden paths and
+docstrings, a weighted count, per-project warnings, three more faults, a wider
+stub detector) writes `results/revision2.json`. Both refresh
+`results/manifest.sha256.json`, the SHA-256 of every code, corpus and result
+file. `annotation/` holds the claim-annotation kit (see its README) and provisional
+LLM labels (`annotation/provisional_labels.py`), which are not human annotation.
+
+`corpus_ext/` is an independent corpus: nine PyPI libraries (pinned versions and their
+licences in `corpus_ext/manifest.json` and each `LICENSE`), selected from 20 candidates
+because their source distribution has tests and their README yields at least four
+claims. `python experiments/external.py` repeats the protocol on it and writes
+`results/external.json` (about 23 minutes on two cores).
+
+`llm/` is the code-reading LLM baseline: `python experiments/llm_export.py` writes the
+prompts, `llm/llm_run.py` runs them on a local GPU through Ollama, and
+`python experiments/llm_score.py` scores the returned `llm/answers.jsonl` into
+`results/llm.json`. See `llm/README.md`.
 
 Dependencies: `pip install -r requirements.txt` (numpy, matplotlib).
 
