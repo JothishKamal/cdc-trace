@@ -1,0 +1,68 @@
+{
+  "source": "PyPI sdists, selected from 20 candidates: tests in the sdist and at least 4 claims extracted from the README",
+  "projects": [
+    {
+      "name": "cachetools",
+      "pypi": "cachetools==5.5.0",
+      "code_dir": "corpus_ext/cachetools/code",
+      "doc_md": "corpus_ext/cachetools/doc.md",
+      "readme_source": "README.rst"
+    },
+    {
+      "name": "deprecation",
+      "pypi": "deprecation==2.1.0",
+      "code_dir": "corpus_ext/deprecation/code",
+      "doc_md": "corpus_ext/deprecation/doc.md",
+      "readme_source": "README.rst"
+    },
+    {
+      "name": "isodate",
+      "pypi": "isodate==0.7.2",
+      "code_dir": "corpus_ext/isodate/code",
+      "doc_md": "corpus_ext/isodate/doc.md",
+      "readme_source": "README.rst"
+    },
+    {
+      "name": "parse",
+      "pypi": "parse==1.20.2",
+      "code_dir": "corpus_ext/parse/code",
+      "doc_md": "corpus_ext/parse/doc.md",
+      "readme_source": "README.rst"
+    },
+    {
+      "name": "pathspec",
+      "pypi": "pathspec==0.12.1",
+      "code_dir": "corpus_ext/pathspec/code",
+      "doc_md": "corpus_ext/pathspec/doc.md",
+      "readme_source": "README.rst"
+    },
+    {
+      "name": "shortuuid",
+      "pypi": "shortuuid==1.0.13",
+      "code_dir": "corpus_ext/shortuuid/code",
+      "doc_md": "corpus_ext/shortuuid/doc.md",
+      "readme_source": "README.md"
+    },
+    {
+      "name": "tabulate",
+      "pypi": "tabulate==0.9.0",
+      "code_dir": "corpus_ext/tabulate/code",
+      "doc_md": "corpus_ext/tabulate/doc.md",
+      "readme_source": "README.md"
+    },
+    {
+      "name": "tenacity",
+      "pypi": "tenacity==9.0.0",
+      "code_dir": "corpus_ext/tenacity/code",
+      "doc_md": "corpus_ext/tenacity/doc.md",
+      "readme_source": "README.rst"
+    },
+    {
+      "name": "xmltodict",
+      "pypi": "xmltodict==0.13.0",
+      "code_dir": "corpus_ext/xmltodict/code",
+      "doc_md": "corpus_ext/xmltodict/doc.md",
+      "readme_source": "README.md"
+    }
+  ]
+}
