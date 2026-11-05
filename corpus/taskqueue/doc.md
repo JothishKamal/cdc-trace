@@ -1,0 +1,21 @@
+## Payload signatures
+
+Workers must not accept a task body that an outsider could rewrite in flight. sign_payload signs the payload with hmac so the digest covers every byte of the message. sign_payload uses hmac together with sha256. verify_payload verifies the payload signature with a constant-time comparison. verify_payload returns a boolean and fails closed on a length mismatch.
+
+Keys are caller-supplied. The digest is 32 raw bytes, not hex, because that is what hmac.new produces.
+
+## Task identifiers
+
+Identifiers and signing keys come from the operating system's CSPRNG rather than from a counter. generate_task_id generates a random id. generate_task_id uses random bytes. generate_queue_key generates a random key long enough for hmac.
+
+A zero-filled draw is rejected and drawn again so a broken generator cannot go unnoticed.
+
+## Queue operations
+
+The queue itself is a list of mappings, which keeps the core free of a broker. enqueue_task stores the task on the queue with attempts set to zero. retry_task handles retry attempts in a bounded loop. retry_task implements retry by catching exceptions and calling the task again. enqueue_task returns the queued item so the caller can inspect its state field.
+
+None results are treated as a reason to try again when attempts remain.
+
+## Integrity hashing
+
+The hmac construction also hashes the payload with sha256. sign_payload hashes the payload with sha256 so the signature is a sha256 digest rather than a truncated xor.

@@ -1,0 +1,2899 @@
+{
+  "bootstrap_reps": 2000,
+  "lopo_thresholds": {
+    "channel_count": {
+      "feedparser": 3,
+      "geocoder": 1,
+      "imageproc": 3,
+      "ledger": 1,
+      "sessionstore": 1,
+      "taskqueue": 3
+    },
+    "embedding": {
+      "feedparser": 0.1,
+      "geocoder": 0.1,
+      "imageproc": 0.1,
+      "ledger": 0.1,
+      "sessionstore": 0.1,
+      "taskqueue": 0.1
+    },
+    "evidence_count": {
+      "feedparser": 3,
+      "geocoder": 1,
+      "imageproc": 3,
+      "ledger": 1,
+      "sessionstore": 1,
+      "taskqueue": 3
+    },
+    "hybrid": {
+      "feedparser": 0.1,
+      "geocoder": 0.1,
+      "imageproc": 0.1,
+      "ledger": 0.1,
+      "sessionstore": 0.1,
+      "taskqueue": 0.1
+    },
+    "lexical": {
+      "feedparser": 0.1,
+      "geocoder": 0.1,
+      "imageproc": 0.1,
+      "ledger": 0.1,
+      "sessionstore": 0.1,
+      "taskqueue": 0.1
+    }
+  },
+  "n_pairs_original": 1077,
+  "n_pairs_semantic": 1077,
+  "policies": [
+    "lexical",
+    "embedding",
+    "hybrid",
+    "evidence_count",
+    "channel_count",
+    "cdc",
+    "cdc_counterfactual",
+    "no_stub_gate",
+    "no_gate_at_all",
+    "no_disjointness",
+    "no_name_doc",
+    "no_body",
+    "no_call_test",
+    "tags_no_file",
+    "tags_no_tok",
+    "tags_channel_only",
+    "claim_ops",
+    "stub_check",
+    "lexical_plus_stub",
+    "op_check"
+  ],
+  "r1_r2_separation_original": {
+    "DELETE": {
+      "cdc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "channel_count": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "claim_ops": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 59.375,
+        "cluster_ci95": [
+          40.625,
+          75.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 59.375
+      },
+      "embedding": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 93.75,
+        "cluster_ci95": [
+          84.375,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 93.75
+      },
+      "evidence_count": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "hybrid": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 90.625,
+        "cluster_ci95": [
+          78.125,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 90.625
+      },
+      "lexical": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 81.25,
+        "cluster_ci95": [
+          68.75,
+          93.75
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 81.25
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 81.25,
+        "cluster_ci95": [
+          68.75,
+          93.75
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 81.25
+      },
+      "no_body": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "op_check": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 59.375,
+        "cluster_ci95": [
+          43.75,
+          75.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 59.375
+      },
+      "stub_check": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "tags_no_file": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 32,
+        "n_clusters": 32,
+        "separation": 100.0
+      }
+    },
+    "NOMINAL": {
+      "cdc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 79.591837,
+        "cluster_ci95": [
+          63.265306,
+          95.454545
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 79.591837
+      },
+      "channel_count": {
+        "accepts_mutated": 14.285714,
+        "accepts_pristine": 91.836735,
+        "cluster_ci95": [
+          61.111111,
+          92.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 77.55102
+      },
+      "claim_ops": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 63.265306,
+        "cluster_ci95": [
+          44.897959,
+          80.434783
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 63.265306
+      },
+      "embedding": {
+        "accepts_mutated": 79.591837,
+        "accepts_pristine": 79.591837,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 0.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 14.285714,
+        "accepts_pristine": 91.836735,
+        "cluster_ci95": [
+          61.702128,
+          91.836735
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 77.55102
+      },
+      "hybrid": {
+        "accepts_mutated": 77.55102,
+        "accepts_pristine": 77.55102,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 0.0
+      },
+      "lexical": {
+        "accepts_mutated": 75.510204,
+        "accepts_pristine": 75.510204,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 0.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 75.510204,
+        "cluster_ci95": [
+          59.183673,
+          90.196078
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 75.510204
+      },
+      "no_body": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 38.77551,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          43.75,
+          76.595745
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 61.22449
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 91.836735,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          20.408163
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 8.163265
+      },
+      "no_name_doc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 91.836735,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          19.607843
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 8.163265
+      },
+      "op_check": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 63.265306,
+        "cluster_ci95": [
+          45.652174,
+          80.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 63.265306
+      },
+      "stub_check": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 100.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 38.77551,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          44.444444,
+          78.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 61.22449
+      },
+      "tags_no_file": {
+        "accepts_mutated": 26.530612,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          56.862745,
+          88.888889
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 73.469388
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 49,
+        "n_clusters": 32,
+        "separation": 100.0
+      }
+    },
+    "RENAME": {
+      "cdc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      },
+      "channel_count": {
+        "accepts_mutated": 13.793103,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          73.333333,
+          96.666667
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 86.206897
+      },
+      "claim_ops": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 96.551724,
+        "cluster_ci95": [
+          88.461538,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 96.551724
+      },
+      "embedding": {
+        "accepts_mutated": 86.206897,
+        "accepts_pristine": 86.206897,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 0.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 13.793103,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          73.333333,
+          96.666667
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 86.206897
+      },
+      "hybrid": {
+        "accepts_mutated": 75.862069,
+        "accepts_pristine": 79.310345,
+        "cluster_ci95": [
+          0.0,
+          10.714286
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 3.448276
+      },
+      "lexical": {
+        "accepts_mutated": 68.965517,
+        "accepts_pristine": 68.965517,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 0.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 68.965517,
+        "accepts_pristine": 68.965517,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 0.0
+      },
+      "no_body": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 55.172414,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          30.0,
+          61.538462
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 44.827586
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      },
+      "op_check": {
+        "accepts_mutated": 96.551724,
+        "accepts_pristine": 96.551724,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 0.0
+      },
+      "stub_check": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 0.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 55.172414,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          29.032258,
+          61.538462
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 44.827586
+      },
+      "tags_no_file": {
+        "accepts_mutated": 37.931034,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          45.454545,
+          79.310345
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 62.068966
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 29,
+        "n_clusters": 19,
+        "separation": 100.0
+      }
+    },
+    "STUB": {
+      "cdc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 77.5,
+        "cluster_ci95": [
+          61.363636,
+          92.307692
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 77.5
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 72.5,
+        "cluster_ci95": [
+          54.761905,
+          90.243902
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 72.5
+      },
+      "channel_count": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 75.0,
+        "cluster_ci95": [
+          57.5,
+          92.307692
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 75.0
+      },
+      "claim_ops": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 52.5,
+        "cluster_ci95": [
+          34.090909,
+          72.222222
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 52.5
+      },
+      "embedding": {
+        "accepts_mutated": 50.0,
+        "accepts_pristine": 85.0,
+        "cluster_ci95": [
+          15.384615,
+          53.846154
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 35.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 75.0,
+        "cluster_ci95": [
+          56.410256,
+          91.666667
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 75.0
+      },
+      "hybrid": {
+        "accepts_mutated": 50.0,
+        "accepts_pristine": 80.0,
+        "cluster_ci95": [
+          12.5,
+          47.727273
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 30.0
+      },
+      "lexical": {
+        "accepts_mutated": 40.0,
+        "accepts_pristine": 60.0,
+        "cluster_ci95": [
+          -6.976744,
+          43.902439
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 20.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 60.0,
+        "cluster_ci95": [
+          41.860465,
+          78.947368
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 60.0
+      },
+      "no_body": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 77.5,
+        "cluster_ci95": [
+          60.465116,
+          92.307692
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 77.5
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 22.5,
+        "accepts_pristine": 85.0,
+        "cluster_ci95": [
+          43.902439,
+          83.333333
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 62.5
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 77.5,
+        "accepts_pristine": 77.5,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 0.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 77.5,
+        "cluster_ci95": [
+          60.526316,
+          92.307692
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 77.5
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 72.5,
+        "accepts_pristine": 77.5,
+        "cluster_ci95": [
+          0.0,
+          13.513514
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 5.0
+      },
+      "op_check": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 70.0,
+        "cluster_ci95": [
+          51.219512,
+          86.842105
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 70.0
+      },
+      "stub_check": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          100.0,
+          100.0
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 100.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 22.5,
+        "accepts_pristine": 85.0,
+        "cluster_ci95": [
+          42.857143,
+          82.352941
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 62.5
+      },
+      "tags_no_file": {
+        "accepts_mutated": 22.5,
+        "accepts_pristine": 85.0,
+        "cluster_ci95": [
+          44.186047,
+          81.578947
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 62.5
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 77.5,
+        "cluster_ci95": [
+          60.526316,
+          92.307692
+        ],
+        "n": 40,
+        "n_clusters": 27,
+        "separation": 77.5
+      }
+    },
+    "WEAKEN": {
+      "cdc": {
+        "accepts_mutated": 57.894737,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 42.105263,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          33.333333
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 15.789474
+      },
+      "channel_count": {
+        "accepts_mutated": 68.421053,
+        "accepts_pristine": 73.684211,
+        "cluster_ci95": [
+          0.0,
+          16.666667
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 5.263158
+      },
+      "claim_ops": {
+        "accepts_mutated": 36.842105,
+        "accepts_pristine": 36.842105,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "embedding": {
+        "accepts_mutated": 73.684211,
+        "accepts_pristine": 73.684211,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 68.421053,
+        "accepts_pristine": 73.684211,
+        "cluster_ci95": [
+          0.0,
+          16.666667
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 5.263158
+      },
+      "hybrid": {
+        "accepts_mutated": 68.421053,
+        "accepts_pristine": 68.421053,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "lexical": {
+        "accepts_mutated": 47.368421,
+        "accepts_pristine": 47.368421,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 47.368421,
+        "accepts_pristine": 47.368421,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "no_body": {
+        "accepts_mutated": 57.894737,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 89.473684,
+        "accepts_pristine": 89.473684,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 57.894737,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 42.105263,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          33.333333
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 15.789474
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 57.894737,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "op_check": {
+        "accepts_mutated": 78.947368,
+        "accepts_pristine": 78.947368,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "stub_check": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 89.473684,
+        "accepts_pristine": 89.473684,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "tags_no_file": {
+        "accepts_mutated": 89.473684,
+        "accepts_pristine": 89.473684,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 57.894737,
+        "accepts_pristine": 57.894737,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 18,
+        "separation": 0.0
+      }
+    }
+  },
+  "r3_lopo_association_labels": {
+    "cdc": {
+      "balanced_accuracy": 0.752147,
+      "f1": 0.440111,
+      "false_rejected_rate": 0.430617,
+      "false_supported_rate": 0.065089,
+      "fn": 11,
+      "fp": 391,
+      "precision": 0.287796,
+      "recall": 0.934911,
+      "specificity": 0.569383,
+      "tn": 517,
+      "tp": 158
+    },
+    "cdc_counterfactual": {
+      "balanced_accuracy": 0.732389,
+      "f1": 0.416559,
+      "false_rejected_rate": 0.487885,
+      "false_supported_rate": 0.047337,
+      "fn": 8,
+      "fp": 443,
+      "precision": 0.266556,
+      "recall": 0.952663,
+      "specificity": 0.512115,
+      "tn": 465,
+      "tp": 161
+    },
+    "channel_count": {
+      "balanced_accuracy": 0.615616,
+      "f1": 0.343249,
+      "false_rejected_rate": 0.212555,
+      "false_supported_rate": 0.556213,
+      "fn": 94,
+      "fp": 193,
+      "precision": 0.279851,
+      "recall": 0.443787,
+      "specificity": 0.787445,
+      "tn": 715,
+      "tp": 75
+    },
+    "claim_ops": {
+      "balanced_accuracy": 0.690193,
+      "f1": 0.378505,
+      "false_rejected_rate": 0.578194,
+      "false_supported_rate": 0.04142,
+      "fn": 7,
+      "fp": 525,
+      "precision": 0.235808,
+      "recall": 0.95858,
+      "specificity": 0.421806,
+      "tn": 383,
+      "tp": 162
+    },
+    "embedding": {
+      "balanced_accuracy": 0.645632,
+      "f1": 0.397759,
+      "false_rejected_rate": 0.128855,
+      "false_supported_rate": 0.579882,
+      "fn": 98,
+      "fp": 117,
+      "precision": 0.37766,
+      "recall": 0.420118,
+      "specificity": 0.871145,
+      "tn": 791,
+      "tp": 71
+    },
+    "evidence_count": {
+      "balanced_accuracy": 0.615616,
+      "f1": 0.343249,
+      "false_rejected_rate": 0.212555,
+      "false_supported_rate": 0.556213,
+      "fn": 94,
+      "fp": 193,
+      "precision": 0.279851,
+      "recall": 0.443787,
+      "specificity": 0.787445,
+      "tn": 715,
+      "tp": 75
+    },
+    "hybrid": {
+      "balanced_accuracy": 0.64776,
+      "f1": 0.394805,
+      "false_rejected_rate": 0.154185,
+      "false_supported_rate": 0.550296,
+      "fn": 93,
+      "fp": 140,
+      "precision": 0.351852,
+      "recall": 0.449704,
+      "specificity": 0.845815,
+      "tn": 768,
+      "tp": 76
+    },
+    "lexical": {
+      "balanced_accuracy": 0.656075,
+      "f1": 0.395455,
+      "false_rejected_rate": 0.202643,
+      "false_supported_rate": 0.485207,
+      "fn": 82,
+      "fp": 184,
+      "precision": 0.321033,
+      "recall": 0.514793,
+      "specificity": 0.797357,
+      "tn": 724,
+      "tp": 87
+    },
+    "lexical_plus_stub": {
+      "balanced_accuracy": 0.81288,
+      "f1": 0.567951,
+      "false_rejected_rate": 0.202643,
+      "false_supported_rate": 0.171598,
+      "fn": 29,
+      "fp": 184,
+      "precision": 0.432099,
+      "recall": 0.828402,
+      "specificity": 0.797357,
+      "tn": 724,
+      "tp": 140
+    },
+    "no_body": {
+      "balanced_accuracy": 0.752147,
+      "f1": 0.440111,
+      "false_rejected_rate": 0.430617,
+      "false_supported_rate": 0.065089,
+      "fn": 11,
+      "fp": 391,
+      "precision": 0.287796,
+      "recall": 0.934911,
+      "specificity": 0.569383,
+      "tn": 517,
+      "tp": 158
+    },
+    "no_call_test": {
+      "balanced_accuracy": 0.5,
+      "f1": 0.271268,
+      "false_rejected_rate": 1.0,
+      "false_supported_rate": 0.0,
+      "fn": 0,
+      "fp": 908,
+      "precision": 0.156917,
+      "recall": 1.0,
+      "specificity": 0.0,
+      "tn": 0,
+      "tp": 169
+    },
+    "no_disjointness": {
+      "balanced_accuracy": 0.619637,
+      "f1": 0.3375,
+      "false_rejected_rate": 0.39978,
+      "false_supported_rate": 0.360947,
+      "fn": 61,
+      "fp": 363,
+      "precision": 0.229299,
+      "recall": 0.639053,
+      "specificity": 0.60022,
+      "tn": 545,
+      "tp": 108
+    },
+    "no_gate_at_all": {
+      "balanced_accuracy": 0.527295,
+      "f1": 0.255452,
+      "false_rejected_rate": 0.430617,
+      "false_supported_rate": 0.514793,
+      "fn": 87,
+      "fp": 391,
+      "precision": 0.173362,
+      "recall": 0.485207,
+      "specificity": 0.569383,
+      "tn": 517,
+      "tp": 82
+    },
+    "no_name_doc": {
+      "balanced_accuracy": 0.753314,
+      "f1": 0.438095,
+      "false_rejected_rate": 0.446035,
+      "false_supported_rate": 0.047337,
+      "fn": 8,
+      "fp": 405,
+      "precision": 0.284452,
+      "recall": 0.952663,
+      "specificity": 0.553965,
+      "tn": 503,
+      "tp": 161
+    },
+    "no_stub_gate": {
+      "balanced_accuracy": 0.533212,
+      "f1": 0.26087,
+      "false_rejected_rate": 0.430617,
+      "false_supported_rate": 0.502959,
+      "fn": 85,
+      "fp": 391,
+      "precision": 0.176842,
+      "recall": 0.497041,
+      "specificity": 0.569383,
+      "tn": 517,
+      "tp": 84
+    },
+    "op_check": {
+      "balanced_accuracy": 0.705931,
+      "f1": 0.421405,
+      "false_rejected_rate": 0.3337,
+      "false_supported_rate": 0.254438,
+      "fn": 43,
+      "fp": 303,
+      "precision": 0.293706,
+      "recall": 0.745562,
+      "specificity": 0.6663,
+      "tn": 605,
+      "tp": 126
+    },
+    "stub_check": {
+      "balanced_accuracy": 0.857988,
+      "f1": 0.834483,
+      "false_rejected_rate": 0.0,
+      "false_supported_rate": 0.284024,
+      "fn": 48,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 0.715976,
+      "specificity": 1.0,
+      "tn": 908,
+      "tp": 121
+    },
+    "tags_channel_only": {
+      "balanced_accuracy": 0.619637,
+      "f1": 0.3375,
+      "false_rejected_rate": 0.39978,
+      "false_supported_rate": 0.360947,
+      "fn": 61,
+      "fp": 363,
+      "precision": 0.229299,
+      "recall": 0.639053,
+      "specificity": 0.60022,
+      "tn": 545,
+      "tp": 108
+    },
+    "tags_no_file": {
+      "balanced_accuracy": 0.642269,
+      "f1": 0.355755,
+      "false_rejected_rate": 0.419604,
+      "false_supported_rate": 0.295858,
+      "fn": 50,
+      "fp": 381,
+      "precision": 0.238,
+      "recall": 0.704142,
+      "specificity": 0.580396,
+      "tn": 527,
+      "tp": 119
+    },
+    "tags_no_tok": {
+      "balanced_accuracy": 0.752147,
+      "f1": 0.440111,
+      "false_rejected_rate": 0.430617,
+      "false_supported_rate": 0.065089,
+      "fn": 11,
+      "fp": 391,
+      "precision": 0.287796,
+      "recall": 0.934911,
+      "specificity": 0.569383,
+      "tn": 517,
+      "tp": 158
+    }
+  },
+  "r3_lopo_behavioural_labels": {
+    "cdc": {
+      "balanced_accuracy": 0.736595,
+      "f1": 0.374456,
+      "false_rejected_rate": 0.448239,
+      "false_supported_rate": 0.078571,
+      "fn": 11,
+      "fp": 420,
+      "precision": 0.234973,
+      "recall": 0.921429,
+      "specificity": 0.551761,
+      "tn": 517,
+      "tp": 129
+    },
+    "cdc_counterfactual": {
+      "balanced_accuracy": 0.719561,
+      "f1": 0.354839,
+      "false_rejected_rate": 0.503735,
+      "false_supported_rate": 0.057143,
+      "fn": 8,
+      "fp": 472,
+      "precision": 0.218543,
+      "recall": 0.942857,
+      "specificity": 0.496265,
+      "tn": 465,
+      "tp": 132
+    },
+    "channel_count": {
+      "balanced_accuracy": 0.632029,
+      "f1": 0.328431,
+      "false_rejected_rate": 0.214514,
+      "false_supported_rate": 0.521429,
+      "fn": 73,
+      "fp": 201,
+      "precision": 0.25,
+      "recall": 0.478571,
+      "specificity": 0.785486,
+      "tn": 736,
+      "tp": 67
+    },
+    "claim_ops": {
+      "balanced_accuracy": 0.679376,
+      "f1": 0.321644,
+      "false_rejected_rate": 0.591249,
+      "false_supported_rate": 0.05,
+      "fn": 7,
+      "fp": 554,
+      "precision": 0.193595,
+      "recall": 0.95,
+      "specificity": 0.408751,
+      "tn": 383,
+      "tp": 133
+    },
+    "embedding": {
+      "balanced_accuracy": 0.674718,
+      "f1": 0.408537,
+      "false_rejected_rate": 0.129136,
+      "false_supported_rate": 0.521429,
+      "fn": 73,
+      "fp": 121,
+      "precision": 0.356383,
+      "recall": 0.478571,
+      "specificity": 0.870864,
+      "tn": 816,
+      "tp": 67
+    },
+    "evidence_count": {
+      "balanced_accuracy": 0.632029,
+      "f1": 0.328431,
+      "false_rejected_rate": 0.214514,
+      "false_supported_rate": 0.521429,
+      "fn": 73,
+      "fp": 201,
+      "precision": 0.25,
+      "recall": 0.478571,
+      "specificity": 0.785486,
+      "tn": 736,
+      "tp": 67
+    },
+    "hybrid": {
+      "balanced_accuracy": 0.667987,
+      "f1": 0.38764,
+      "false_rejected_rate": 0.156884,
+      "false_supported_rate": 0.507143,
+      "fn": 71,
+      "fp": 147,
+      "precision": 0.319444,
+      "recall": 0.492857,
+      "specificity": 0.843116,
+      "tn": 790,
+      "tp": 69
+    },
+    "lexical": {
+      "balanced_accuracy": 0.675583,
+      "f1": 0.379562,
+      "false_rejected_rate": 0.205977,
+      "false_supported_rate": 0.442857,
+      "fn": 62,
+      "fp": 193,
+      "precision": 0.287823,
+      "recall": 0.557143,
+      "specificity": 0.794023,
+      "tn": 744,
+      "tp": 78
+    },
+    "lexical_plus_stub": {
+      "balanced_accuracy": 0.864869,
+      "f1": 0.564655,
+      "false_rejected_rate": 0.205977,
+      "false_supported_rate": 0.064286,
+      "fn": 9,
+      "fp": 193,
+      "precision": 0.404321,
+      "recall": 0.935714,
+      "specificity": 0.794023,
+      "tn": 744,
+      "tp": 131
+    },
+    "no_body": {
+      "balanced_accuracy": 0.736595,
+      "f1": 0.374456,
+      "false_rejected_rate": 0.448239,
+      "false_supported_rate": 0.078571,
+      "fn": 11,
+      "fp": 420,
+      "precision": 0.234973,
+      "recall": 0.921429,
+      "specificity": 0.551761,
+      "tn": 517,
+      "tp": 129
+    },
+    "no_call_test": {
+      "balanced_accuracy": 0.5,
+      "f1": 0.230074,
+      "false_rejected_rate": 1.0,
+      "false_supported_rate": 0.0,
+      "fn": 0,
+      "fp": 937,
+      "precision": 0.129991,
+      "recall": 1.0,
+      "specificity": 0.0,
+      "tn": 0,
+      "tp": 140
+    },
+    "no_disjointness": {
+      "balanced_accuracy": 0.638645,
+      "f1": 0.310966,
+      "false_rejected_rate": 0.401281,
+      "false_supported_rate": 0.321429,
+      "fn": 45,
+      "fp": 376,
+      "precision": 0.201699,
+      "recall": 0.678571,
+      "specificity": 0.598719,
+      "tn": 561,
+      "tp": 95
+    },
+    "no_gate_at_all": {
+      "balanced_accuracy": 0.465166,
+      "f1": 0.17292,
+      "false_rejected_rate": 0.448239,
+      "false_supported_rate": 0.621429,
+      "fn": 87,
+      "fp": 420,
+      "precision": 0.112051,
+      "recall": 0.378571,
+      "specificity": 0.551761,
+      "tn": 517,
+      "tp": 53
+    },
+    "no_name_doc": {
+      "balanced_accuracy": 0.739838,
+      "f1": 0.373938,
+      "false_rejected_rate": 0.46318,
+      "false_supported_rate": 0.057143,
+      "fn": 8,
+      "fp": 434,
+      "precision": 0.233216,
+      "recall": 0.942857,
+      "specificity": 0.53682,
+      "tn": 503,
+      "tp": 132
+    },
+    "no_stub_gate": {
+      "balanced_accuracy": 0.472309,
+      "f1": 0.178862,
+      "false_rejected_rate": 0.448239,
+      "false_supported_rate": 0.607143,
+      "fn": 85,
+      "fp": 420,
+      "precision": 0.115789,
+      "recall": 0.392857,
+      "specificity": 0.551761,
+      "tn": 517,
+      "tp": 55
+    },
+    "op_check": {
+      "balanced_accuracy": 0.784209,
+      "f1": 0.439367,
+      "false_rejected_rate": 0.32444,
+      "false_supported_rate": 0.107143,
+      "fn": 15,
+      "fp": 304,
+      "precision": 0.291375,
+      "recall": 0.892857,
+      "specificity": 0.67556,
+      "tn": 633,
+      "tp": 125
+    },
+    "stub_check": {
+      "balanced_accuracy": 0.932143,
+      "f1": 0.927203,
+      "false_rejected_rate": 0.0,
+      "false_supported_rate": 0.135714,
+      "fn": 19,
+      "fp": 0,
+      "precision": 1.0,
+      "recall": 0.864286,
+      "specificity": 1.0,
+      "tn": 937,
+      "tp": 121
+    },
+    "tags_channel_only": {
+      "balanced_accuracy": 0.638645,
+      "f1": 0.310966,
+      "false_rejected_rate": 0.401281,
+      "false_supported_rate": 0.321429,
+      "fn": 45,
+      "fp": 376,
+      "precision": 0.201699,
+      "recall": 0.678571,
+      "specificity": 0.598719,
+      "tn": 561,
+      "tp": 95
+    },
+    "tags_no_file": {
+      "balanced_accuracy": 0.647801,
+      "f1": 0.315625,
+      "false_rejected_rate": 0.425827,
+      "false_supported_rate": 0.278571,
+      "fn": 39,
+      "fp": 399,
+      "precision": 0.202,
+      "recall": 0.721429,
+      "specificity": 0.574173,
+      "tn": 538,
+      "tp": 101
+    },
+    "tags_no_tok": {
+      "balanced_accuracy": 0.736595,
+      "f1": 0.374456,
+      "false_rejected_rate": 0.448239,
+      "false_supported_rate": 0.078571,
+      "fn": 11,
+      "fp": 420,
+      "precision": 0.234973,
+      "recall": 0.921429,
+      "specificity": 0.551761,
+      "tn": 517,
+      "tp": 129
+    }
+  },
+  "r4_operator_counts": {
+    "CONST_RETURN": 100,
+    "DROP_GUARD": 44,
+    "NEGATE_COND": 19
+  },
+  "r4_separation_semantic": {
+    "CONST_RETURN": {
+      "cdc": {
+        "accepts_mutated": 75.0,
+        "accepts_pristine": 78.0,
+        "cluster_ci95": [
+          0.0,
+          7.216495
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 73.0,
+        "accepts_pristine": 76.0,
+        "cluster_ci95": [
+          0.0,
+          6.896552
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "channel_count": {
+        "accepts_mutated": 77.0,
+        "accepts_pristine": 80.0,
+        "cluster_ci95": [
+          0.0,
+          7.216495
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "claim_ops": {
+        "accepts_mutated": 56.0,
+        "accepts_pristine": 59.0,
+        "cluster_ci95": [
+          0.0,
+          7.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "embedding": {
+        "accepts_mutated": 85.0,
+        "accepts_pristine": 85.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 0.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 77.0,
+        "accepts_pristine": 80.0,
+        "cluster_ci95": [
+          0.0,
+          6.818182
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "hybrid": {
+        "accepts_mutated": 84.0,
+        "accepts_pristine": 84.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 0.0
+      },
+      "lexical": {
+        "accepts_mutated": 77.0,
+        "accepts_pristine": 77.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 0.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 74.0,
+        "accepts_pristine": 77.0,
+        "cluster_ci95": [
+          0.0,
+          6.930693
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "no_body": {
+        "accepts_mutated": 75.0,
+        "accepts_pristine": 78.0,
+        "cluster_ci95": [
+          0.0,
+          6.930693
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 85.0,
+        "accepts_pristine": 87.0,
+        "cluster_ci95": [
+          0.0,
+          5.208333
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 2.0
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 78.0,
+        "accepts_pristine": 78.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 0.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 75.0,
+        "accepts_pristine": 78.0,
+        "cluster_ci95": [
+          0.0,
+          6.730769
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 78.0,
+        "accepts_pristine": 78.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 0.0
+      },
+      "op_check": {
+        "accepts_mutated": 74.0,
+        "accepts_pristine": 77.0,
+        "cluster_ci95": [
+          0.0,
+          6.741573
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "stub_check": {
+        "accepts_mutated": 97.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          6.741573
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 85.0,
+        "accepts_pristine": 87.0,
+        "cluster_ci95": [
+          0.0,
+          5.319149
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 2.0
+      },
+      "tags_no_file": {
+        "accepts_mutated": 84.0,
+        "accepts_pristine": 87.0,
+        "cluster_ci95": [
+          0.0,
+          7.070707
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 75.0,
+        "accepts_pristine": 78.0,
+        "cluster_ci95": [
+          0.0,
+          6.730769
+        ],
+        "n": 100,
+        "n_clusters": 61,
+        "separation": 3.0
+      }
+    },
+    "DROP_GUARD": {
+      "cdc": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "channel_count": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "claim_ops": {
+        "accepts_mutated": 84.090909,
+        "accepts_pristine": 84.090909,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "embedding": {
+        "accepts_mutated": 86.363636,
+        "accepts_pristine": 86.363636,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "hybrid": {
+        "accepts_mutated": 84.090909,
+        "accepts_pristine": 84.090909,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "lexical": {
+        "accepts_mutated": 77.272727,
+        "accepts_pristine": 77.272727,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 77.272727,
+        "accepts_pristine": 77.272727,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "no_body": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "op_check": {
+        "accepts_mutated": 84.090909,
+        "accepts_pristine": 84.090909,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "stub_check": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "tags_no_file": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 44,
+        "n_clusters": 35,
+        "separation": 0.0
+      }
+    },
+    "NEGATE_COND": {
+      "cdc": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "cdc_counterfactual": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "channel_count": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "claim_ops": {
+        "accepts_mutated": 47.368421,
+        "accepts_pristine": 47.368421,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "embedding": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "evidence_count": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "hybrid": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "lexical": {
+        "accepts_mutated": 89.473684,
+        "accepts_pristine": 89.473684,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "lexical_plus_stub": {
+        "accepts_mutated": 89.473684,
+        "accepts_pristine": 89.473684,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "no_body": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "no_call_test": {
+        "accepts_mutated": 0.0,
+        "accepts_pristine": 0.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "no_disjointness": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "no_gate_at_all": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "no_name_doc": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "no_stub_gate": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "op_check": {
+        "accepts_mutated": 47.368421,
+        "accepts_pristine": 47.368421,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "stub_check": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "tags_channel_only": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "tags_no_file": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      },
+      "tags_no_tok": {
+        "accepts_mutated": 100.0,
+        "accepts_pristine": 100.0,
+        "cluster_ci95": [
+          0.0,
+          0.0
+        ],
+        "n": 19,
+        "n_clusters": 13,
+        "separation": 0.0
+      }
+    }
+  },
+  "r5_sensitivity": {
+    "k_min": {
+      "cdc_counterfactual_k1": {
+        "false_rejected_rate": 0.430617,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 100.0
+      },
+      "cdc_counterfactual_k2": {
+        "false_rejected_rate": 0.487885,
+        "false_supported_rate": 0.047337,
+        "nominal_accepts_pristine": 79.591837,
+        "nominal_separation": 79.591837
+      },
+      "cdc_counterfactual_k3": {
+        "false_rejected_rate": 1.0,
+        "false_supported_rate": 0.0,
+        "nominal_accepts_pristine": 0.0,
+        "nominal_separation": 0.0
+      },
+      "cdc_counterfactual_k4": {
+        "false_rejected_rate": 1.0,
+        "false_supported_rate": 0.0,
+        "nominal_accepts_pristine": 0.0,
+        "nominal_separation": 0.0
+      },
+      "cdc_k1": {
+        "false_rejected_rate": 0.035242,
+        "false_supported_rate": 0.710059,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 8.163265
+      },
+      "cdc_k2": {
+        "false_rejected_rate": 0.430617,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 100.0
+      },
+      "cdc_k3": {
+        "false_rejected_rate": 0.487885,
+        "false_supported_rate": 0.047337,
+        "nominal_accepts_pristine": 79.591837,
+        "nominal_separation": 79.591837
+      },
+      "cdc_k4": {
+        "false_rejected_rate": 1.0,
+        "false_supported_rate": 0.0,
+        "nominal_accepts_pristine": 0.0,
+        "nominal_separation": 0.0
+      }
+    },
+    "min_strength": {
+      "0.0": {
+        "false_rejected_rate": 0.430617,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 100.0
+      },
+      "0.05": {
+        "false_rejected_rate": 0.430617,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 100.0
+      },
+      "0.1": {
+        "false_rejected_rate": 0.430617,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 100.0
+      },
+      "0.15": {
+        "false_rejected_rate": 0.430617,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 100.0,
+        "nominal_separation": 100.0
+      },
+      "0.2": {
+        "false_rejected_rate": 0.493392,
+        "false_supported_rate": 0.065089,
+        "nominal_accepts_pristine": 93.877551,
+        "nominal_separation": 93.877551
+      },
+      "0.3": {
+        "false_rejected_rate": 0.552863,
+        "false_supported_rate": 0.047337,
+        "nominal_accepts_pristine": 73.469388,
+        "nominal_separation": 73.469388
+      },
+      "0.5": {
+        "false_rejected_rate": 0.592511,
+        "false_supported_rate": 0.047337,
+        "nominal_accepts_pristine": 67.346939,
+        "nominal_separation": 67.346939
+      }
+    }
+  },
+  "r6_project_level": {
+    "claims_with_two_or_more_supporting_elements": 62,
+    "conditions": {
+      "all_gutted": {
+        "cdc_any": {
+          "accepts": 0,
+          "accepts_pct": 0.0,
+          "n": 80
+        },
+        "cdc_pooled": {
+          "accepts": 11,
+          "accepts_pct": 13.75,
+          "n": 80
+        },
+        "lexical_any": {
+          "accepts": 80,
+          "accepts_pct": 100.0,
+          "n": 80
+        }
+      },
+      "one_gutted": {
+        "cdc_any": {
+          "accepts": 60,
+          "accepts_pct": 96.774194,
+          "n": 62
+        },
+        "cdc_pooled": {
+          "accepts": 60,
+          "accepts_pct": 96.774194,
+          "n": 62
+        },
+        "lexical_any": {
+          "accepts": 62,
+          "accepts_pct": 100.0,
+          "n": 62
+        }
+      },
+      "pristine": {
+        "cdc_any": {
+          "accepts": 80,
+          "accepts_pct": 100.0,
+          "n": 80
+        },
+        "cdc_pooled": {
+          "accepts": 80,
+          "accepts_pct": 100.0,
+          "n": 80
+        },
+        "lexical_any": {
+          "accepts": 80,
+          "accepts_pct": 100.0,
+          "n": 80
+        }
+      }
+    },
+    "rule": "any-element: exists x with C(c,x) >= 2; pooled: C(c,P) >= 2"
+  },
+  "r7_targeted_weaken": {
+    "separation": {
+      "WEAKEN": {
+        "cdc": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "cdc_counterfactual": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "channel_count": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "claim_ops": {
+          "accepts_mutated": 53.246753,
+          "accepts_pristine": 67.532468,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 14.285714
+        },
+        "embedding": {
+          "accepts_mutated": 81.818182,
+          "accepts_pristine": 81.818182,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "evidence_count": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "hybrid": {
+          "accepts_mutated": 76.623377,
+          "accepts_pristine": 76.623377,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "lexical": {
+          "accepts_mutated": 64.935065,
+          "accepts_pristine": 64.935065,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "lexical_plus_stub": {
+          "accepts_mutated": 64.935065,
+          "accepts_pristine": 64.935065,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "no_body": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "no_call_test": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 0.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "no_disjointness": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "no_gate_at_all": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "no_name_doc": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "no_stub_gate": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "op_check": {
+          "accepts_mutated": 53.246753,
+          "accepts_pristine": 67.532468,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 14.285714
+        },
+        "stub_check": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "tags_channel_only": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "tags_no_file": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        },
+        "tags_no_tok": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 0.0
+        }
+      }
+    },
+    "separation_crypto_claims": {
+      "WEAKEN": {
+        "cdc": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "cdc_counterfactual": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "channel_count": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "claim_ops": {
+          "accepts_mutated": 41.071429,
+          "accepts_pristine": 60.714286,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 19.642857
+        },
+        "embedding": {
+          "accepts_mutated": 87.5,
+          "accepts_pristine": 87.5,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "evidence_count": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "hybrid": {
+          "accepts_mutated": 82.142857,
+          "accepts_pristine": 82.142857,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "lexical": {
+          "accepts_mutated": 69.642857,
+          "accepts_pristine": 69.642857,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "lexical_plus_stub": {
+          "accepts_mutated": 69.642857,
+          "accepts_pristine": 69.642857,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "no_body": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "no_call_test": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 0.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "no_disjointness": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "no_gate_at_all": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "no_name_doc": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "no_stub_gate": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "op_check": {
+          "accepts_mutated": 41.071429,
+          "accepts_pristine": 60.714286,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 19.642857
+        },
+        "stub_check": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "tags_channel_only": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "tags_no_file": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "tags_no_tok": {
+          "accepts_mutated": 100.0,
+          "accepts_pristine": 100.0,
+          "n": 56,
+          "n_clusters": 19,
+          "separation": 0.0
+        }
+      }
+    },
+    "targets": [
+      "crypto:aes_gcm_decrypt_token",
+      "crypto:aes_gcm_encrypt_token",
+      "crypto:hash_session_token",
+      "crypto:rotate_session_key",
+      "crypto:seal_blob",
+      "mac:sign_payload",
+      "tokens:generate_queue_key",
+      "tokens:generate_task_id",
+      "integrity:hash_entry",
+      "hashutil:hash_histogram",
+      "hashutil:hash_image"
+    ]
+  },
+  "r8_body_on_weaken": {
+    "body_fires_mutated": 8,
+    "body_fires_pristine": 8,
+    "n": 19
+  },
+  "r8_cap_hits": {
+    "claims": 80,
+    "largest_pooled_evidence": 31,
+    "pair_cap_hits": 0,
+    "pairs": 359,
+    "pooled_claim_cap_hits": 3
+  },
+  "r8_warning_burden_pristine": {
+    "feedparser": {
+      "claims": 15,
+      "supported": 15,
+      "unsupported": 0,
+      "weak": 0
+    },
+    "geocoder": {
+      "claims": 13,
+      "supported": 13,
+      "unsupported": 0,
+      "weak": 0
+    },
+    "imageproc": {
+      "claims": 13,
+      "supported": 13,
+      "unsupported": 0,
+      "weak": 0
+    },
+    "ledger": {
+      "claims": 12,
+      "supported": 12,
+      "unsupported": 0,
+      "weak": 0
+    },
+    "sessionstore": {
+      "claims": 14,
+      "supported": 14,
+      "unsupported": 0,
+      "weak": 0
+    },
+    "taskqueue": {
+      "claims": 13,
+      "supported": 13,
+      "unsupported": 0,
+      "weak": 0
+    }
+  },
+  "r8_weaken_effective": {
+    "pairs": 19,
+    "pairs_on_changed_targets": 8,
+    "targets": 5,
+    "targets_changed": 1
+  },
+  "rounds": 3,
+  "seed": 20260902,
+  "thresholds_pooled": {
+    "channel_count": 3,
+    "embedding": 0.1,
+    "evidence_count": 3,
+    "hybrid": 0.1,
+    "lexical": 0.1
+  }
+}

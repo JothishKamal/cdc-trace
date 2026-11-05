@@ -97,8 +97,7 @@ remain disjoint, so the transitive closure over-merges.
 
 **Deferred to the Final Review, stated openly in the deck**
 
-- Live LLM claim-extraction backend. The interface and the cached path exist; live calls
-  are deferred.
+- Live LLM claim-extraction backend.
 - Corpus scale-up beyond the vendored set.
 - Cross-language extraction beyond Python.
 - Oral-probe question generation for high-gap components.
@@ -114,8 +113,8 @@ evidence, and nothing more.
        (Markdown / LaTeX)                     (Python repo)
               |                                     |
       [300] claim extraction              [200] code extraction
-      rule-based default,                 AST inventory, call graph,
-      LLM backend (cached)                routes, schema, imports, tests
+      rule-based default                   AST inventory, call graph,
+      (LLM backend deferred)               routes, schema, imports, tests
               |                                     |
               +------------------+------------------+
                                  |
