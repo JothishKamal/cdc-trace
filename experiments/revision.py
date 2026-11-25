@@ -626,6 +626,12 @@ def manifest():
     return out
 
 
+def write_manifest():
+    with open(os.path.join(ROOT, "results", "manifest.sha256.json"), "w", encoding="utf-8") as fh:
+        json.dump(manifest(), fh, sort_keys=True, indent=2)
+        fh.write("\n")
+
+
 # ----------------------------------------------------------------------- run
 def run():
     pristine = [(e["name"], load_project(e)) for e in load_manifest()["projects"]]

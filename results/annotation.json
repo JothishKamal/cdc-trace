@@ -1,0 +1,48 @@
+{
+  "labelled": 123,
+  "gold_claims": 117,
+  "tp": 80,
+  "fp": 0,
+  "fn": 37,
+  "tn": 6,
+  "precision": 1.0,
+  "recall": 0.6838,
+  "f1": 0.8122,
+  "component_accuracy": 0.9625,
+  "component_correct": 77,
+  "annotator_b": {
+    "labelled": 123,
+    "gold_claims": 106,
+    "tp": 80,
+    "fp": 0,
+    "fn": 26,
+    "tn": 17,
+    "precision": 1.0,
+    "recall": 0.7547,
+    "f1": 0.8602,
+    "component_accuracy": 0.95,
+    "component_correct": 76
+  },
+  "agreement": {
+    "double_labelled": 123,
+    "gold_raw_agreement": 0.9106,
+    "gold_kappa": 0.4846,
+    "is_claim_raw_agreement": 0.8862,
+    "is_claim_kappa": 0.2487
+  },
+  "consensus": {
+    "labelled": 112,
+    "gold_claims": 106,
+    "tp": 80,
+    "fp": 0,
+    "fn": 26,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.7547,
+    "f1": 0.8602,
+    "component_accuracy": 0.9625,
+    "component_correct": 77
+  },
+  "kappa_is_claim": 0.2487,
+  "double_labelled": 123
+}

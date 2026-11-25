@@ -1,0 +1,348 @@
+{
+  "by_set": {
+    "authored": {
+      "original": {
+        "DELETE": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 53.125,
+          "cluster_ci95": [
+            37.5,
+            71.875
+          ],
+          "n": 32,
+          "n_clusters": 32,
+          "separation": 53.125
+        },
+        "NOMINAL": {
+          "accepts_mutated": 2.040816,
+          "accepts_pristine": 40.816327,
+          "cluster_ci95": [
+            22.916667,
+            54.545455
+          ],
+          "n": 49,
+          "n_clusters": 32,
+          "separation": 38.77551
+        },
+        "RENAME": {
+          "accepts_mutated": 55.172414,
+          "accepts_pristine": 55.172414,
+          "cluster_ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 29,
+          "n_clusters": 19,
+          "separation": 0.0
+        },
+        "STUB": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 35.0,
+          "cluster_ci95": [
+            17.5,
+            53.846154
+          ],
+          "n": 40,
+          "n_clusters": 27,
+          "separation": 35.0
+        },
+        "WEAKEN": {
+          "accepts_mutated": 26.315789,
+          "accepts_pristine": 36.842105,
+          "cluster_ci95": [
+            0.0,
+            26.315789
+          ],
+          "n": 19,
+          "n_clusters": 18,
+          "separation": 10.526316
+        }
+      },
+      "placeholder": {
+        "DELEGATE": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 50.0,
+          "cluster_ci95": [
+            33.333333,
+            66.666667
+          ],
+          "n": 28,
+          "n_clusters": 26,
+          "separation": 50.0
+        },
+        "RETURN_CONST": {
+          "accepts_mutated": 1.587302,
+          "accepts_pristine": 49.206349,
+          "cluster_ci95": [
+            33.333333,
+            62.857143
+          ],
+          "n": 63,
+          "n_clusters": 34,
+          "separation": 47.619048
+        },
+        "RETURN_EMPTY": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 51.351351,
+          "cluster_ci95": [
+            36.111111,
+            65.714286
+          ],
+          "n": 37,
+          "n_clusters": 31,
+          "separation": 51.351351
+        },
+        "RETURN_PARAM": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 56.818182,
+          "cluster_ci95": [
+            42.5,
+            71.73913
+          ],
+          "n": 44,
+          "n_clusters": 38,
+          "separation": 56.818182
+        }
+      },
+      "r14": {
+        "BAD_EXCEPT": {
+          "accepts_mutated": 66.666667,
+          "accepts_pristine": 66.666667,
+          "cluster_ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 3,
+          "n_clusters": 3,
+          "separation": 0.0
+        },
+        "DROP_BRANCH": {
+          "accepts_mutated": 49.462366,
+          "accepts_pristine": 55.913978,
+          "cluster_ci95": [
+            2.12766,
+            11.764706
+          ],
+          "n": 93,
+          "n_clusters": 61,
+          "separation": 6.451613
+        },
+        "WRONG_PARAM": {
+          "accepts_mutated": 44.444444,
+          "accepts_pristine": 44.444444,
+          "cluster_ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 9,
+          "n_clusters": 9,
+          "separation": 0.0
+        }
+      },
+      "semantic": {
+        "CONST_RETURN": {
+          "accepts_mutated": 27.0,
+          "accepts_pristine": 55.0,
+          "cluster_ci95": [
+            18.811881,
+            39.175258
+          ],
+          "n": 100,
+          "n_clusters": 61,
+          "separation": 28.0
+        },
+        "DROP_GUARD": {
+          "accepts_mutated": 61.363636,
+          "accepts_pristine": 61.363636,
+          "cluster_ci95": [
+            0.0,
+            0.0
+          ],
+          "n": 44,
+          "n_clusters": 35,
+          "separation": 0.0
+        },
+        "NEGATE_COND": {
+          "accepts_mutated": 52.631579,
+          "accepts_pristine": 57.894737,
+          "cluster_ci95": [
+            0.0,
+            17.647059
+          ],
+          "n": 19,
+          "n_clusters": 13,
+          "separation": 5.263158
+        }
+      },
+      "weaken": {
+        "WEAKEN": {
+          "accepts_mutated": 23.376623,
+          "accepts_pristine": 51.948052,
+          "cluster_ci95": [
+            18.181818,
+            40.243902
+          ],
+          "n": 77,
+          "n_clusters": 31,
+          "separation": 28.571429
+        }
+      }
+    },
+    "external": {
+      "original": {
+        "DELETE": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 39.007092,
+          "cluster_ci95": [
+            26.495726,
+            53.374233
+          ],
+          "n": 141,
+          "n_clusters": 44,
+          "separation": 39.007092
+        },
+        "NOMINAL": {
+          "accepts_mutated": 0.699301,
+          "accepts_pristine": 37.062937,
+          "cluster_ci95": [
+            23.870968,
+            50.649351
+          ],
+          "n": 143,
+          "n_clusters": 39,
+          "separation": 36.363636
+        },
+        "RENAME": {
+          "accepts_mutated": 28.846154,
+          "accepts_pristine": 27.884615,
+          "cluster_ci95": [
+            -4.395604,
+            2.150538
+          ],
+          "n": 104,
+          "n_clusters": 39,
+          "separation": -0.961538
+        },
+        "STUB": {
+          "accepts_mutated": 0.0,
+          "accepts_pristine": 28.368794,
+          "cluster_ci95": [
+            17.730496,
+            38.888889
+          ],
+          "n": 141,
+          "n_clusters": 35,
+          "separation": 28.368794
+        },
+        "WEAKEN": {
+          "accepts_mutated": 23.140496,
+          "accepts_pristine": 24.793388,
+          "cluster_ci95": [
+            -2.752294,
+            6.21118
+          ],
+          "n": 121,
+          "n_clusters": 45,
+          "separation": 1.652893
+        }
+      }
+    }
+  },
+  "confusion": {
+    "authored": {
+      "association": {
+        "balanced_accuracy": 0.635352,
+        "f1": 0.34186,
+        "false_rejected_rate": 0.599119,
+        "false_supported_rate": 0.130178,
+        "fn": 22,
+        "fp": 544,
+        "precision": 0.212735,
+        "recall": 0.869822,
+        "specificity": 0.400881,
+        "tn": 364,
+        "tp": 147
+      },
+      "behavioural": {
+        "balanced_accuracy": 0.681346,
+        "f1": 0.322503,
+        "false_rejected_rate": 0.59445,
+        "false_supported_rate": 0.042857,
+        "fn": 6,
+        "fp": 557,
+        "precision": 0.193922,
+        "recall": 0.957143,
+        "specificity": 0.40555,
+        "tn": 380,
+        "tp": 134
+      }
+    },
+    "external": {
+      "association": {
+        "balanced_accuracy": 0.647711,
+        "f1": 0.370765,
+        "false_rejected_rate": 0.613808,
+        "false_supported_rate": 0.090769,
+        "fn": 59,
+        "fp": 1947,
+        "precision": 0.232861,
+        "recall": 0.909231,
+        "specificity": 0.386192,
+        "tn": 1225,
+        "tp": 591
+      },
+      "behavioural": {
+        "balanced_accuracy": 0.664988,
+        "f1": 0.335279,
+        "false_rejected_rate": 0.616911,
+        "false_supported_rate": 0.053114,
+        "fn": 29,
+        "fp": 2021,
+        "precision": 0.203704,
+        "recall": 0.946886,
+        "specificity": 0.383089,
+        "tn": 1255,
+        "tp": 517
+      }
+    }
+  },
+  "pooled": {
+    "authored_placeholders": {
+      "accepts_mutated": 0.581395,
+      "accepts_pristine": 51.744186,
+      "cluster_ci95": [
+        41.714286,
+        61.494253
+      ],
+      "n": 172,
+      "n_clusters": 65,
+      "separation": 51.162791
+    },
+    "authored_weaken_crypto_claims": {
+      "accepts_mutated": 16.071429,
+      "accepts_pristine": 50.0,
+      "cluster_ci95": [
+        21.052632,
+        51.020408
+      ],
+      "n": 56,
+      "n_clusters": 19,
+      "separation": 33.928571
+    }
+  },
+  "prompts_answered": 3580,
+  "prompts_needed": 3580,
+  "run_info": {
+    "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+    "model": "qwen2.5-coder:7b",
+    "options": {
+      "num_ctx": 4096,
+      "num_predict": 4,
+      "seed": 20260902,
+      "temperature": 0,
+      "top_k": 1
+    },
+    "started": "2026-11-05 12:47:00"
+  },
+  "unparsed": 0
+}

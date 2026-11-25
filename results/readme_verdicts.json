@@ -1,0 +1,22 @@
+{
+  "claim": {
+    "SUPPORTED": 17,
+    "UNSUPPORTED": 34,
+    "WEAK": 14
+  },
+  "not_claim": {
+    "SUPPORTED": 4,
+    "UNSUPPORTED": 38,
+    "WEAK": 33
+  },
+  "split": {
+    "SUPPORTED": 0,
+    "UNSUPPORTED": 3,
+    "WEAK": 2
+  },
+  "unmatched": {
+    "SUPPORTED": 0,
+    "UNSUPPORTED": 0,
+    "WEAK": 0
+  }
+}

@@ -21,6 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 from cdc import codebase as cb
+from cdc.evidence import CLAIM_OPS
 from experiments import external as X
 from experiments import revision as R
 from experiments import revision2 as R2
@@ -118,7 +119,9 @@ def main():
         for p in pairs:
             rec = {"corpus": corpus, "family": family, "project": p["project"],
                    "round": p["round"], "cid": p["cid"], "uid": p["uid"],
-                   "operator": p["operator"], "pre": None, "mut": None}
+                   "operator": p["operator"], "pre": None, "mut": None,
+                   "claim_ops": sorted({CLAIM_OPS[t] for t in p["claim"].terms
+                                        if t in CLAIM_OPS})}
             for side, el in (("pre", p["pre_el"]), ("mut", p["mut_el"])):
                 if el is None:
                     continue

@@ -82,6 +82,15 @@ prompts, `llm/llm_run.py` runs them on a local GPU through Ollama, and
 `python experiments/llm_score.py` scores the returned `llm/answers.jsonl` into
 `results/llm.json`. See `llm/README.md`.
 
+The second review (R02) adds two more. `python experiments/calibration_ext.py` repeats the
+calibration of `C` on the nine libraries with every setting frozen and writes
+`results/calibration_ext.json` (about one minute). `python experiments/coverage_corpus.py`
+runs each project's tests under coverage.py with branch coverage and writes
+`results/coverage.json`; it needs `pytest` and `coverage`, plus `tornado` and `typeguard`
+for tenacity's tests. `annotation/readmes/` holds the two annotators' labels for every README
+sentence (see `annotation/README.md`); `python experiments/readme_verdicts.py` splits the tool's
+README claim verdicts by those labels.
+
 Dependencies: `pip install -r requirements.txt` (numpy, matplotlib).
 
 ## Headline results

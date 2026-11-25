@@ -1,0 +1,55 @@
+{
+  "authored": {
+    "0": {
+      "c": 0,
+      "fraction_truly_implemented": 0.395062,
+      "n": 81,
+      "n_implemented": 32
+    },
+    "1": {
+      "c": 1,
+      "fraction_truly_implemented": 0.767094,
+      "n": 468,
+      "n_implemented": 359
+    },
+    "2": {
+      "c": 2,
+      "fraction_truly_implemented": 0.945455,
+      "n": 55,
+      "n_implemented": 52
+    },
+    "3": {
+      "c": 3,
+      "fraction_truly_implemented": 0.983087,
+      "n": 473,
+      "n_implemented": 465
+    }
+  },
+  "held_out_libraries": {
+    "0": {
+      "c": 0,
+      "fraction_truly_implemented": 0.053812,
+      "n": 223,
+      "n_implemented": 12
+    },
+    "1": {
+      "c": 1,
+      "fraction_truly_implemented": 0.862178,
+      "n": 2837,
+      "n_implemented": 2446
+    },
+    "2": {
+      "c": 2,
+      "fraction_truly_implemented": 0.93617,
+      "n": 752,
+      "n_implemented": 704
+    },
+    "3": {
+      "c": 3,
+      "fraction_truly_implemented": 1.0,
+      "n": 10,
+      "n_implemented": 10
+    }
+  },
+  "n_pairs": 3822
+}

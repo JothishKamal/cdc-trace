@@ -1,0 +1,12 @@
+{
+  "model": "qwen2.5-coder:7b",
+  "digest": "dae161e27b0e90dd1856c8bb3209201fd6736d8eb66298e75ed87571486f4364",
+  "options": {
+    "temperature": 0,
+    "seed": 20260902,
+    "num_predict": 4,
+    "num_ctx": 4096,
+    "top_k": 1
+  },
+  "started": "2026-11-05 12:47:00"
+}

@@ -77,6 +77,14 @@ def score(pairs, answers):
     for (corpus, family, op), rows in sorted(groups.items()):
         out["by_set"].setdefault(corpus, {}).setdefault(family, {})[op] = sep_with_ci(
             rows, ans, SEED + len(op) + len(family))
+    # Pooled rows reported in the paper: all four placeholder forms, and the targeted
+    # WEAKEN pairs whose claim implies a cryptographic operation (as for op_check).
+    crypto = {"op:hash", "op:aead", "op:mac", "op:random", "op:kdf"}
+    ph = [r for r in pairs if r["family"] == "placeholder" and r["operator"]]
+    wk = [r for r in pairs if r["family"] == "weaken" and r["operator"]
+          and set(r.get("claim_ops", [])) & crypto]
+    out["pooled"] = {"authored_placeholders": sep_with_ci(ph, ans, SEED + 101),
+                     "authored_weaken_crypto_claims": sep_with_ci(wk, ans, SEED + 102)}
     for corpus in sorted({r["corpus"] for r in pairs}):
         rows = [r for r in pairs if r["corpus"] == corpus and r["family"] == "original"]
         out["confusion"][corpus] = {

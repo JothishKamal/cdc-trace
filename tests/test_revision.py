@@ -31,13 +31,10 @@ def _claim(terms):
                  terms=frozenset(terms), implied_libs=frozenset(), section="1")
 
 
-BASE_OPS = ("NEGATE_COND", "DROP_GUARD", "CONST_RETURN")
-
-
 def test_semantic_operators_change_code_and_stay_valid():
-    # experiments/revision2.py adds operators to _SEM on import; those need other
-    # source shapes and are tested in test_revision2.py.
-    for op in BASE_OPS:
+    # revision2 registers three more operators in _SEM when it is imported (as it is when every
+    # test file runs in one process); those have their own test in test_revision2.py.
+    for op in ("NEGATE_COND", "DROP_GUARD", "CONST_RETURN"):
         fn = _SEM[op]
         tree = ast.parse(SRC)
         assert fn(tree.body[0]), op
